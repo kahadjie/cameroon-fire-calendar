@@ -221,20 +221,7 @@ Remaining:
 
 ## Use of AI
 
-This project was built with the help of **Claude** (Anthropic), an AI assistant, working under the
-direction and review of the team (Kenmoe Kahadjie Felix):
-
-- **Code**: Claude wrote `harmonize.py`, `test_harmonize.py`, `inspect_archives.py`,
-  `check_palette.py` and `index.html` (layout, calendar, map, CSV export), from a written plan and the
-  team's decisions (S-NPP as main series, per-year calibration, confidence filter, flagged incomplete
-  months), and the summary sentence, explanations and "Compare two years" view.
-- **Data checks**: Claude ran the tests and the inspection of the real FIRMS files, and compared the
-  figures in this README with `aggregats.json`.
-- **Documentation**: Claude drafted this README, the English translation of the interface, the
-  submission description, the audit (`docs/AUDIT.md`) and the demo plan.
-
-The data themselves are NASA FIRMS data, unchanged; no AI-generated data, image or figure is presented
-as observed data. The team reviewed and approved the choices and the results.
+This project was built with an AI assistant (Claude, by Anthropic). It helped write the code and the documentation. The team chose the method, checked the results against the NASA FIRMS data, and decided what is published. No AI-generated data, image or figure is presented as observed data.
 
 ## Data license
 

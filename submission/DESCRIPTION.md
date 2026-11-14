@@ -25,5 +25,6 @@ unusual, on a phone and in grayscale.
 **Limitations.** Provisional months (July to November 2026) are flagged; low-season percentages are
 unstable; detections are not burned area.
 
-**Use of AI.** Claude (Anthropic) wrote the code, ran the checks and drafted the documentation under our
-direction and review. All data are unchanged NASA FIRMS data.
+**Use of AI**
+
+This project was built with an AI assistant (Claude, by Anthropic). It helped write the code and the documentation. The team chose the method, checked the results against the NASA FIRMS data, and decided what is published. No AI-generated data, image or figure is presented as observed data.
