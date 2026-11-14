@@ -4,22 +4,26 @@
 Team WESH MIS (WorldWide Emergent Smart Hub): Kenmoe Kahadjie Felix.
 App: https://kahadjie.github.io/cameroon-fire-calendar/ · Code: https://github.com/kahadjie/cameroon-fire-calendar
 
-Our app shows fire activity across Cameroon as a month × year calendar from 2012 to 2026, so anyone
-can see at a glance whether a month burned more or less than usual. Each cell is the month's anomaly
-against its 2012-2025 median; a map shows where detections occurred, and every value shown exports to
-CSV.
+**The problem.** NASA has watched fires from space with MODIS since 2000 and with the sharper VIIRS
+sensors since 2012; VIIRS sees about four times more hotspots. Their counts cannot be compared
+directly, and anyone who wants to know whether a month is unusually active has no single, consistent
+series to read.
 
-**Method.** We use NASA FIRMS hotspots: MODIS C6.1 and VIIRS 375 m (S-NPP, NOAA-20, NOAA-21). We keep
-nominal and high confidence on a common scale and only presumed vegetation fires. S-NPP is the main
-series, because adding sensors would count the same fire twice; NOAA-20 and NOAA-21 cross-check it
-(correlation 0.999 and 0.998). MODIS is converted to S-NPP equivalent with one factor per year (4.008
-in 2012 to 4.693 in 2025), never a single constant.
+**Our answer.** A month × year calendar of fires across Cameroon, from 2012 to 2 November 2026, the last
+day Suomi NPP delivers near-real-time data. Each cell says how far the month is from its usual level
+(the 2012-2025 median for that month); a map shows where, and every value shown exports to CSV.
 
-**Limitations.** A MODIS gap (30 August to 8 September 2026) and provisional months (July to November
-2026) are flagged in the app; rainy-season percentages are unstable; detections are not burned area.
+**Method.** NASA FIRMS hotspots, MODIS C6.1 and VIIRS 375 m (Suomi NPP, NOAA-20, NOAA-21); nominal and
+high confidence; presumed vegetation fires only. Suomi NPP is the main series, so no fire is counted
+twice; NOAA-20 and NOAA-21 cross-check it (correlation 0.999 and 0.998). MODIS is rescaled with one
+factor per year (4.008 in 2012 to 4.693 in 2025). Held-out test: 4.49% error with one constant
+factor, 2.48% with Aqua only (measured, not yet applied).
 
-**Impact.** Forest services, researchers and journalists get a trustworthy, accessible view of fire
-trends, readable on a phone and in grayscale; the calendar even works offline.
+**Impact.** Forest services, researchers and journalists can see in seconds whether this season is
+unusual, on a phone and in grayscale.
 
-**Use of AI.** Claude (Anthropic) wrote the code, ran the checks and drafted the documentation under
-our direction and review. All data are unchanged NASA FIRMS data.
+**Limitations.** Provisional months (July to November 2026) are flagged; low-season percentages are
+unstable; detections are not burned area.
+
+**Use of AI.** Claude (Anthropic) wrote the code, ran the checks and drafted the documentation under our
+direction and review. All data are unchanged NASA FIRMS data.

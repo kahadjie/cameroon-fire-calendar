@@ -6,12 +6,28 @@ NASA Space Apps Challenge 2026, challenge "Harmonizing MODIS and VIIRS fire hots
 
 **Team WESH MIS** (WorldWide Emergent Smart Hub), Cameroon: Kenmoe Kahadjie Felix (sole member).
 
-![The application: month × year anomaly calendar, map and calibration table](docs/screenshot.png)
+## In 30 seconds
+
+- **Problem**: NASA's two fire sensors, MODIS and VIIRS, count fires differently (VIIRS records about
+  four times more detections), so nobody can read one consistent fire history to say whether a month
+  is unusually active.
+- **Solution**: a calendar of every month since 2012 for Cameroon, on one scale: Suomi NPP (VIIRS) is
+  the reference and MODIS is rescaled year by year. The page opens on a generated sentence: the latest
+  month of the main series and how far it is from its usual level. Main series data end on
+  2 November 2026, the last day Suomi NPP delivers near-real-time data.
+- **One figure**: on years left out of the calibration, the error of the MODIS → VIIRS rescaling is
+  4.49% with one constant factor and 2.48% when MODIS is matched with Aqua only (measured; the
+  published series still uses each year's own factor).
+- **Try it**: https://kahadjie.github.io/cameroon-fire-calendar/
+
+![The application: summary sentence, the problem, and the month × year calendar](docs/screenshot.png)
 
 A static web application (one page, `index.html`, Leaflet from a CDN, no server) that shows, for all of
-Cameroon, a month × year calendar of fire hotspots from 2012 to 2026. The main view is each month's
-**anomaly** against its **historical median** (2012 to 2025). A map shows detections per 0.5° cell for
-the chosen year and months. The values shown can be exported as CSV.
+Cameroon, a month × year calendar of fire hotspots from 2012 to 2 November 2026 (main series). Each
+month is compared with its **usual level** (the 2012-2025 median of that month). A map shows detections
+per 0.5° cell for the chosen year and months, a "Compare two years" view puts two seasons side by
+side, and the values shown can be downloaded as CSV. Technical words are explained on the page
+(underlined terms and a "Words used" section).
 
 ## Open the application
 
@@ -58,7 +74,8 @@ Base map: © OpenStreetMap contributors (ODbL). No other data source is used.
    not provisional. A year without overlap would take the nearest year's factor (and say so).
 5. **Incomplete months are left empty, not extrapolated.** A month has a value for a sensor only if it
    is covered from its first to its last day: January 2012 (data start on the 20th), November 2026 for
-   S-NPP (NRT ends on 2 November), August and September 2026 for MODIS (gap).
+   S-NPP (NRT ends on 2 November), August and September 2026 for MODIS (no MODIS detection in the
+   downloaded files from 30 August to 8 September).
 6. **Historical median** of each calendar month over 2012-2025 (167 reference months, excluding
    incomplete and provisional months). Anomaly = (value − median) / median × 100.
 7. **Provisional data**: every month containing NRT data, plus the last 5 months (July to November
@@ -69,8 +86,13 @@ Base map: © OpenStreetMap contributors (ODbL). No other data source is used.
 
 ## Limitations
 
-- **MODIS gap from 30 August to 8 September 2026** (no data in either the archive or NRT): August and
-  September 2026 have no MODIS value. Shown in the application. The S-NPP series is not affected.
+- **MODIS, 30 August to 8 September 2026**: the downloaded files contain no MODIS detection on these
+  days, so August and September 2026 have no MODIS value. NASA's availability service lists MODIS
+  standard data up to 31 August and near-real-time data from 1 September, so this may simply be days
+  without fire; it is not yet checked. Shown in the application. The main series is not affected.
+- **The main series ends on 2 November 2026**: Suomi NPP near-real-time data stop on that day (NASA
+  availability service); NOAA-20 and NOAA-21 continue to 14 November 2026 but are only used as a
+  cross-check. November 2026 is therefore incomplete.
 - **The 2026 factor is 5.942, from 6 months only** (January to June). It is well outside the 2012-2025
   range (3.951 to 4.693), so read it with caution (incomplete year; possibly the end of life of the
   Terra satellite). The 2026 MODIS equivalent depends on it.
@@ -81,7 +103,7 @@ Base map: © OpenStreetMap contributors (ODbL). No other data source is used.
   starting between June and September), S-NPP 24 (20 between June and September), mostly the quiet
   rainy season. Two S-NPP breaks fall in the fire season and may be data outages: **2 to 7 November
   2024** and **9 to 13 March 2026**. Those months are kept as complete; their counts may be slightly
-  low. Only the 2026 MODIS gap above is a confirmed outage.
+  low. None of these breaks is confirmed as a data outage.
 - A detection is not a fire: a large fire gives several pixels, a small fire under clouds gives none.
   Counts measure detected activity, not burned area.
 - NRT files have no `type` column: NRT months may include a few static sources (about 0.4% based on
@@ -106,6 +128,34 @@ All figures below come from `aggregats.json`.
   strong anomaly in the fire season itself.
 - **2026**: January (−24.9%) and February (−32.2%), the most active months, were below their median;
   March (+41.6%) above. July to November 2026 are provisional.
+- **Most active month on record** (Suomi NPP): February 2023, 90,395 detections (usual level for
+  February 55,432).
+- **Held-out test of the rescaling** (each full year 2013-2025 left out in turn, measured on the
+  development branch `global`): 4.49% average error with one constant factor, 3.25% from the adjacent
+  years, 2.48% when MODIS is matched with Aqua only (same time of day). This is a comparison: the
+  published series uses each year's own all-MODIS factor.
+
+## CSV download
+
+The button "Download these values (CSV)" saves the months selected, for the current view, as
+`cameroon_fire_calendar_<view>_2012_to_<last day of the main series>.csv` (`<view>`:
+`vs_usual_pct`, `detections` or `modis_rescaled`). The first line (starting with `#`) gives the source
+and the last day of the main series. Columns:
+
+| Column | Meaning |
+|---|---|
+| `year`, `month` | the month |
+| `value_shown` | the value displayed in the calendar for the chosen view |
+| `view` | `anomaly`, `snpp` or `modis_equiv` |
+| `snpp` | Suomi NPP detections (main series); empty if the month is not complete |
+| `modis` | MODIS detections (Aqua + Terra); empty if not complete |
+| `modis_as_snpp` | MODIS rescaled to Suomi NPP: `modis` × `factor` |
+| `factor`, `factor_year` | the rescaling factor and the year it comes from |
+| `snpp_median` | usual level: median of that calendar month over 2012-2025 |
+| `anomaly_pct` | (`snpp` − `snpp_median`) / `snpp_median` × 100 |
+| `n20`, `n21` | NOAA-20 and NOAA-21 detections (cross-check only, never added) |
+| `provisional` | 1 if the month may still change |
+| `modis_complete` | 1 if MODIS covers the whole month |
 
 ## Reproduce
 
@@ -114,7 +164,7 @@ Requirements: Python 3.13 (pandas has no release for Python 3.15 yet) and pandas
 ```
 pip install pandas
 python test_harmonize.py      # 10 tests on synthetic data
-python inspect_archives.py    # checks the real files in data/ (dates, satellites, confidence, gaps)
+python inspect_archives.py    # checks the real files in data/ (dates, satellites, confidence, breaks)
 python harmonize.py           # writes aggregats.json, grille.json and donnees.js
 python check_palette.py       # grayscale palette check
 ```
@@ -135,8 +185,35 @@ into `data/modis`, `data/snpp`, `data/noaa20`, `data/noaa21`. No API key is used
 | `test_harmonize.py` | unit tests |
 | `inspect_archives.py` | inspection of the real files |
 | `check_palette.py` | grayscale palette check |
+| `docs/AUDIT.md` | audit against the five judging criteria |
+| `docs/DEMO_PLAN.md` | 30-second and 2-minute scripts, 7 slides |
+| `submission/DESCRIPTION.md` | submission text |
 
 The repository contains only aggregates: no raw detection, no key, no personal data.
+
+## Status
+
+Done:
+- [x] Harmonized calendar for Cameroon, 2012 to 2 November 2026 (main series) — [index.html](index.html)
+- [x] Generated summary sentence, plain-language labels, explained terms — [index.html](index.html)
+- [x] Validation shown on the page (held-out test, cross-check with NOAA-20/21) — [Key results](#key-results)
+- [x] Compare two years, CSV download with documented columns — [CSV download](#csv-download)
+- [x] Checked at 390 px width, in grayscale, and with the keyboard (Tab, Enter, arrow keys)
+- [x] Audit against the judging criteria — [docs/AUDIT.md](docs/AUDIT.md)
+- [x] Demo scripts and slide plan — [docs/DEMO_PLAN.md](docs/DEMO_PLAN.md)
+- [x] Submission text — [submission/DESCRIPTION.md](submission/DESCRIPTION.md)
+
+Remaining:
+- [ ] Record the demo video from [docs/DEMO_PLAN.md](docs/DEMO_PLAN.md)
+- [ ] Submit the NASA Space Apps form (description, app link, video) before 15 November 2026, 23:59 (Cameroon)
+- [ ] Check with NASA FIRMS whether MODIS has data from 30 August to 8 September 2026
+
+## Roadmap
+
+- Any country, with automatic updates every 6 hours (built on the development branch `global`, not
+  merged).
+- Rescale MODIS with Aqua only (same time of day as VIIRS), once validated.
+- Fire radiative power (FRP) next to counts.
 
 ## Use of AI
 
@@ -145,11 +222,12 @@ direction and review of the team (Kenmoe Kahadjie Felix):
 
 - **Code**: Claude wrote `harmonize.py`, `test_harmonize.py`, `inspect_archives.py`,
   `check_palette.py` and `index.html` (layout, calendar, map, CSV export), from a written plan and the
-  team's decisions (S-NPP as main series, per-year calibration, confidence filter, flagged gaps).
+  team's decisions (S-NPP as main series, per-year calibration, confidence filter, flagged incomplete
+  months), and the summary sentence, explanations and "Compare two years" view.
 - **Data checks**: Claude ran the tests and the inspection of the real FIRMS files, and compared the
   figures in this README with `aggregats.json`.
 - **Documentation**: Claude drafted this README, the English translation of the interface, the
-  submission description and the demo outline.
+  submission description, the audit (`docs/AUDIT.md`) and the demo plan.
 
 The data themselves are NASA FIRMS data, unchanged; no AI-generated data, image or figure is presented
 as observed data. The team reviewed and approved the choices and the results.
