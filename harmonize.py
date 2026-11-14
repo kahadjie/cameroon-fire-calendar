@@ -1,10 +1,10 @@
-"""Harmonisation MODIS / VIIRS des points chauds FIRMS pour le Cameroun (NASA Space Apps 2026).
+"""MODIS / VIIRS harmonization of NASA FIRMS fire hotspots for Cameroon (NASA Space Apps 2026).
 
-Série principale : S-NPP (VIIRS, 2012 à 2026). MODIS est converti en « équivalent S-NPP » avec un
-ratio de recouvrement calculé PAR ANNÉE (jamais une constante). NOAA-20 et NOAA-21 servent seulement
-de vérification (pas d'addition des capteurs : ils voient souvent le même feu).
+Main series: S-NPP (VIIRS, 2012 to 2026). MODIS is converted to an "S-NPP equivalent" with an overlap
+ratio computed FOR EACH YEAR (never a single constant). NOAA-20 and NOAA-21 are used only as a
+cross-check (sensors are never added together: they often detect the same fire).
 
-Utilisation : python harmonize.py  (lit data/, écrit aggregats.json et grille.json)
+Usage: python harmonize.py  (reads data/, writes aggregats.json, grille.json and donnees.js)
 """
 
 from __future__ import annotations
@@ -19,13 +19,13 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "data"
 
-# Niveaux de confiance communs : MODIS 0-100 -> l / n / h (seuils FIRMS : < 30, 30-79, >= 80).
+# Common confidence levels: MODIS 0-100 -> l / n / h (FIRMS thresholds: < 30, 30-79, >= 80).
 MODIS_LOW_MAX = 30
 MODIS_HIGH_MIN = 80
 LEVELS = {"l": 0, "n": 1, "h": 2}
-MIN_LEVEL = "n"  # « nominal et plus », comme pour le calcul des ratios
+MIN_LEVEL = "n"  # "nominal and high", as for the calibration ratios
 
-# Faits vérifiés sur les fichiers (voir HANDOFF.md et inspect_archives.py).
+# Facts checked on the files (see inspect_archives.py).
 MODIS_GAP = (date(2026, 8, 30), date(2026, 9, 8))
 PROVISIONAL_LAST_MONTHS = 5
 GRID_DEG = 0.5
@@ -34,20 +34,20 @@ COLUMNS = ["latitude", "longitude", "acq_date", "acq_time", "satellite", "confid
 
 
 def load_firms(path: Path, source: str) -> pd.DataFrame:
-    """Lit un CSV FIRMS. acq_time reste du texte (HHMM avec zéros initiaux)."""
+    """Reads a FIRMS CSV. acq_time stays text (HHMM with leading zeros)."""
     head = pd.read_csv(path, nrows=0).columns
     use = [c for c in COLUMNS if c in head]
     df = pd.read_csv(path, usecols=use, dtype={"acq_time": str, "satellite": str, "confidence": str})
     df["acq_time"] = df["acq_time"].str.zfill(4)
     df["acq_date"] = pd.to_datetime(df["acq_date"], format="%Y-%m-%d")
-    df["source"] = source  # "archive" ou "nrt"
+    df["source"] = source  # "archive" or "nrt"
     if "type" not in df.columns:
-        df["type"] = pd.NA  # absent des fichiers NRT
+        df["type"] = pd.NA  # missing from NRT files
     return df
 
 
 def normalize_confidence(df: pd.DataFrame) -> pd.DataFrame:
-    """Ajoute conf_level (0 bas, 1 nominal, 2 haut), même échelle pour MODIS (nombre) et VIIRS (l/n/h)."""
+    """Adds conf_level (0 low, 1 nominal, 2 high), same scale for MODIS (number) and VIIRS (l/n/h)."""
     out = df.copy()
     text = out["confidence"].astype(str).str.strip().str.lower()
     numeric = pd.to_numeric(text, errors="coerce")
@@ -61,7 +61,7 @@ def normalize_confidence(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def filter_detections(df: pd.DataFrame, min_level: str = MIN_LEVEL) -> pd.DataFrame:
-    """Garde la confiance >= min_level ; dans l'archive, seulement type 0 (feu de végétation présumé)."""
+    """Keeps confidence >= min_level; in the archive, only type 0 (presumed vegetation fire)."""
     keep = df["conf_level"] >= LEVELS[min_level]
     has_type = df["type"].notna()
     keep &= ~has_type | (pd.to_numeric(df["type"], errors="coerce") == 0)
@@ -69,7 +69,7 @@ def filter_detections(df: pd.DataFrame, min_level: str = MIN_LEVEL) -> pd.DataFr
 
 
 def monthly_counts(df: pd.DataFrame) -> pd.Series:
-    """Nombre de détections par (année, mois)."""
+    """Number of detections per (year, month)."""
     if df.empty:
         return pd.Series(dtype="int64")
     key = [df["acq_date"].dt.year.rename("year"), df["acq_date"].dt.month.rename("month")]
@@ -77,7 +77,7 @@ def monthly_counts(df: pd.DataFrame) -> pd.Series:
 
 
 def yearly_ratio(viirs: pd.Series, modis: pd.Series, usable: set[tuple[int, int]]) -> dict[int, dict]:
-    """Ratio VIIRS / MODIS par année, sur les seuls mois complets pour les deux capteurs."""
+    """VIIRS / MODIS ratio per year, over months complete for both sensors only."""
     out: dict[int, dict] = {}
     both = [k for k in viirs.index if k in modis.index and k in usable]
     for year in sorted({y for y, _ in both}):
@@ -90,7 +90,7 @@ def yearly_ratio(viirs: pd.Series, modis: pd.Series, usable: set[tuple[int, int]
 
 
 def ratio_for(year: int, ratios: dict[int, dict]) -> tuple[float | None, int | None]:
-    """Ratio de l'année, sinon celui de l'année connue la plus proche (signalé par l'année d'origine)."""
+    """The year's ratio, otherwise the nearest known year's (reported through its source year)."""
     if not ratios:
         return None, None
     if year in ratios:
@@ -100,7 +100,7 @@ def ratio_for(year: int, ratios: dict[int, dict]) -> tuple[float | None, int | N
 
 
 def month_medians(counts: dict[tuple[int, int], int], reference: set[tuple[int, int]]) -> dict[int, float]:
-    """Médiane historique de chaque mois du calendrier, sur les mois de référence seulement."""
+    """Historical median of each calendar month, over reference months only."""
     out: dict[int, float] = {}
     for month in range(1, 13):
         values = [counts[k] for k in reference if k[1] == month and k in counts]
@@ -110,7 +110,7 @@ def month_medians(counts: dict[tuple[int, int], int], reference: set[tuple[int, 
 
 
 def anomaly_pct(value: float | None, median: float | None) -> float | None:
-    """Écart à la médiane en pourcentage ; None si la médiane est nulle ou inconnue."""
+    """Difference from the median, in percent; None when the median is zero or unknown."""
     if value is None or median is None or median == 0:
         return None
     return round((value - median) / median * 100, 1)
@@ -125,7 +125,7 @@ def month_range(first: date, last: date) -> list[tuple[int, int]]:
 
 
 def coverage_flags(key: tuple[int, int], cover: dict[str, tuple[date, date]]) -> dict[str, bool]:
-    """Mois complet ou non pour chaque capteur (début, fin de couverture, trou MODIS)."""
+    """Whether the month is complete for each sensor (start and end of coverage, MODIS gap)."""
     y, m = key
     start = date(y, m, 1)
     end = date(y + (m == 12), m % 12 + 1, 1)
@@ -148,7 +148,7 @@ def load_sensor(folder: str) -> tuple[pd.DataFrame, tuple[date, date]]:
 
 
 def grid_counts(df: pd.DataFrame) -> dict[str, list]:
-    """Comptes par cellule de 0,5° et par mois (série principale), pour la carte."""
+    """Counts per 0.5° cell and per month (main series), for the map. No individual detections."""
     cell_lat = (df["latitude"] // GRID_DEG * GRID_DEG).round(2)
     cell_lng = (df["longitude"] // GRID_DEG * GRID_DEG).round(2)
     g = df.groupby([df["acq_date"].dt.year, df["acq_date"].dt.month, cell_lat, cell_lng]).size()
@@ -211,15 +211,15 @@ def build(data_dir: Path = DATA) -> tuple[dict, dict]:
     archive = raw["snpp"][raw["snpp"]["source"] == "archive"]
     static_share = float((pd.to_numeric(archive["type"], errors="coerce") != 0).mean())
     meta = {
-        "title": "Points chauds de feu au Cameroun, MODIS et VIIRS harmonisés",
+        "title": "Cameroon fire hotspots, MODIS and VIIRS harmonized",
         "source": "NASA FIRMS (Fire Information for Resource Management System), https://firms.modaps.eosdis.nasa.gov",
         "generated": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),
-        "main_series": "S-NPP (VIIRS 375 m), confiance nominale et haute, archive type 0",
+        "main_series": "S-NPP (VIIRS 375 m), nominal and high confidence, archive type 0",
         "coverage": {k: [v[0].isoformat(), v[1].isoformat()] for k, v in cover.items()},
         "modis_gap": [MODIS_GAP[0].isoformat(), MODIS_GAP[1].isoformat()],
         "reference_months": len(reference),
         "reference_years": [min(k[0] for k in reference), max(k[0] for k in reference)],
-        "provisional_rule": f"mois avec données NRT, et les {PROVISIONAL_LAST_MONTHS} derniers mois",
+        "provisional_rule": f"months with NRT data, and the last {PROVISIONAL_LAST_MONTHS} months",
         "snpp_archive_static_share": round(static_share, 4),
         "grid_deg": GRID_DEG,
     }
@@ -233,14 +233,14 @@ def main() -> int:
     agg, grid = build()
     (ROOT / "aggregats.json").write_text(json.dumps(agg, ensure_ascii=False, indent=1), encoding="utf-8")
     (ROOT / "grille.json").write_text(json.dumps(grid, separators=(",", ":")), encoding="utf-8")
-    # Même contenu en script : index.html s'ouvre d'un double-clic (fetch() refuse file://).
+    # Same content as a script, so index.html opens with a double-click (fetch() refuses file://).
     js = "window.FIRMS_AGG=" + json.dumps(agg, ensure_ascii=False, separators=(",", ":")) + ";\n"
     js += "window.FIRMS_GRID=" + json.dumps(grid, separators=(",", ":")) + ";\n"
     (ROOT / "donnees.js").write_text(js, encoding="utf-8")
-    print(f"aggregats.json : {len(agg['months'])} mois ; grille.json : {len(grid['cells'])} mois")
+    print(f"aggregats.json: {len(agg['months'])} months; grille.json: {len(grid['cells'])} months")
     for c in agg["calibration"]:
-        print(f"  ratio S-NPP/MODIS {c['year']} : {c['ratio']} ({c['months_used']} mois)")
-    print("  vérification :", agg["verification"])
+        print(f"  S-NPP/MODIS ratio {c['year']}: {c['ratio']} ({c['months_used']} months)")
+    print("  cross-check:", agg["verification"])
     return 0
 
 

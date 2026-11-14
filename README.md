@@ -1,127 +1,153 @@
-# Feux du Cameroun, MODIS et VIIRS harmonisés
+# Cameroon fire calendar: MODIS and VIIRS harmonized
 
-NASA Space Apps Challenge 2026, défi « Harmonisation des points chauds MODIS et VIIRS ».
+NASA Space Apps Challenge 2026, challenge "Harmonizing MODIS and VIIRS fire hotspots".
 
-Application web statique (une page, `index.html`, Leaflet par CDN, sans serveur) qui montre, pour tout
-le Cameroun, un calendrier mois × année des points chauds de feu de 2012 à 2026. La vue principale est
-l'**anomalie** de chaque mois par rapport à sa **médiane historique** (2012 à 2025). Une carte montre
-les détections par cellule de 0,5° pour l'année et les mois choisis. Les valeurs affichées s'exportent
-en CSV.
+A static web application (one page, `index.html`, Leaflet from a CDN, no server) that shows, for all of
+Cameroon, a month × year calendar of fire hotspots from 2012 to 2026. The main view is each month's
+**anomaly** against its **historical median** (2012 to 2025). A map shows detections per 0.5° cell for
+the chosen year and months. The values shown can be exported as CSV.
 
-## Ouvrir l'application
+## Open the application
 
-Double-cliquer sur `index.html` (les données sont dans `donnees.js`, aucun serveur n'est nécessaire).
-Le fond de carte et Leaflet viennent d'Internet ; sans connexion, le calendrier et l'export marchent
-quand même. Autre possibilité : `python -m http.server 8000`, puis http://localhost:8000.
+Double-click `index.html` (the data are in `donnees.js`, no server needed). Leaflet and the base map
+come from the internet; without a connection, the calendar and the CSV export still work. Alternative:
+`python -m http.server 8000`, then open http://localhost:8000.
 
-## Sources
+## NASA data
 
-- **NASA FIRMS** (Fire Information for Resource Management System), téléchargements par pays (Cameroun) :
-  - MODIS Collection 6.1 (Aqua et Terra), 1 km : `DL_FIRE_M-C61`
-  - VIIRS 375 m S-NPP : `DL_FIRE_SV-C2` ; NOAA-20 : `DL_FIRE_J1V-C2` ; NOAA-21 : `DL_FIRE_J2V-C2`
-  - pour chacun, une archive (données définitives) et un fichier NRT (temps quasi réel).
-- Citation : « We acknowledge the use of data and imagery from LANCE FIRMS operated by NASA's Earth
-  Science Data and Information System (ESDIS) with funding provided by NASA Headquarters. »
-  https://firms.modaps.eosdis.nasa.gov
-- Fond de carte : © contributeurs OpenStreetMap.
+All fire data come from **NASA FIRMS** (Fire Information for Resource Management System),
+https://firms.modaps.eosdis.nasa.gov, country downloads for Cameroon
+(https://firms.modaps.eosdis.nasa.gov/download/):
 
-Couvertures réelles des fichiers (vérifiées par `inspect_archives.py`) :
+| Product | FIRMS download | Satellites | Archive | Near real-time (NRT) |
+|---|---|---|---|---|
+| MODIS Collection 6.1, 1 km | `DL_FIRE_M-C61` | Aqua, Terra | 2012-01-20 → 2026-08-29 | 2026-09-09 → 2026-11-13 |
+| VIIRS 375 m, Collection 2 | `DL_FIRE_SV-C2` | Suomi NPP (`SNPP`) | 2012-01-20 → 2026-07-31 | 2026-08-01 → 2026-11-02 |
+| VIIRS 375 m, Collection 2 | `DL_FIRE_J1V-C2` | NOAA-20 (`N20`) | 2018-04-01 → 2026-07-31 | 2026-08-01 → 2026-11-13 |
+| VIIRS 375 m, Collection 2 | `DL_FIRE_J2V-C2` | NOAA-21 (`N21`) | 2023-03-01 → 2026-07-31 | 2026-08-01 → 2026-11-13 |
 
-| Capteur | Archive | NRT |
-|---|---|---|
-| MODIS (Aqua, Terra) | 2012-01-20 → 2026-08-29 | 2026-09-09 → 2026-11-13 |
-| S-NPP | 2012-01-20 → 2026-07-31 | 2026-08-01 → 2026-11-02 |
-| NOAA-20 | 2018-04-01 → 2026-07-31 | 2026-08-01 → 2026-11-13 |
-| NOAA-21 | 2023-03-01 → 2026-07-31 | 2026-08-01 → 2026-11-13 |
+Coverage dates are those found in the files by `inspect_archives.py`. Citation (also shown in the
+application):
 
-## Décisions
+> We acknowledge the use of data and imagery from LANCE FIRMS operated by NASA's Earth Science Data and
+> Information System (ESDIS) with funding provided by NASA Headquarters.
 
-1. **Série principale : S-NPP seule, sans addition des capteurs.** S-NPP, NOAA-20 et NOAA-21 passent
-   souvent au-dessus du même feu à quelques minutes d'intervalle : additionner leurs détections
-   compterait deux ou trois fois le même feu. Plutôt qu'un dédoublonnage spatio-temporel (fragile et
-   lent), S-NPP est figée comme série principale : c'est la seule série VIIRS qui couvre 2012 à 2026.
-   NOAA-20 et NOAA-21 servent **seulement à vérifier** cette série (voir Résultats).
-2. **Confiance « nominale et haute » sur une échelle commune.** VIIRS donne `l`/`n`/`h`. MODIS donne
-   0-100, converti avec les seuils FIRMS : bas < 30, nominal 30-79, haut ≥ 80. Les détections basses
-   sont écartées pour les deux capteurs.
-3. **Archive : `type = 0` seulement** (feu de végétation présumé), ce qui écarte les volcans, les sources
-   fixes terrestres et le large (torchères). Les fichiers NRT n'ont pas cette colonne : ils gardent
-   tout. Effet mesuré sur l'archive S-NPP : 0,42 % des détections seulement.
-4. **Calibration MODIS → équivalent S-NPP par année, jamais une constante.** Pour chaque année :
-   facteur = détections S-NPP / détections MODIS, sur les mois complets pour les deux capteurs et non
-   provisoires. Une année sans recouvrement prendrait le facteur de l'année la plus proche (signalé).
-5. **Mois incomplets écartés, pas extrapolés.** Un mois n'a de valeur pour un capteur que s'il est
-   couvert du premier au dernier jour : janvier 2012 (début le 20), novembre 2026 pour S-NPP (fin du
-   NRT le 2 novembre), août et septembre 2026 pour MODIS (trou).
-6. **Médiane historique** de chaque mois du calendrier sur 2012-2025 (167 mois de référence, sans les
-   mois incomplets ni provisoires). Anomalie = (valeur − médiane) / médiane × 100.
-7. **Données provisoires** : tout mois qui contient des données NRT, et les 5 derniers mois (juillet à
-   novembre 2026). Ils sont hachurés et signalés par un bandeau ; l'année 2026 est marquée incomplète.
-8. **Palette « cividis »** (8 classes), lisible par les daltoniens et ordonnée en niveaux de gris.
-   Vérifiée par `check_palette.py` (gris de 30 à 224, écart d'au moins 22 entre deux classes) et par
-   une capture de la page en niveaux de gris. Chaque case porte aussi sa valeur en chiffres.
+Base map: © OpenStreetMap contributors (ODbL). No other data source is used.
 
-## Limites
+## Decisions
 
-- **Trou MODIS du 30 août au 8 septembre 2026** (aucune donnée, ni archive ni NRT) : août et septembre
-  2026 n'ont pas de valeur MODIS. Signalé dans l'application. La série S-NPP n'est pas touchée.
-- **Facteur 2026 = 5,94, calculé sur 6 mois** (janvier à juin). Il sort nettement de la plage
-  2012-2025 (3,95 à 4,69) : à lire avec prudence (année incomplète, possible effet de la fin de vie de
-  Terra). L'équivalent MODIS 2026 en dépend.
-- **Saison des pluies** (juin à septembre) : la médiane tombe sous 500 détections, parfois sous 300 ;
-  quelques dizaines de détections suffisent alors à donner ±70 %. L'application le rappelle dans le
-  détail du mois.
-- Une détection n'est pas un feu : un grand feu donne plusieurs pixels, un petit feu sous les nuages
-  n'en donne aucun. Les comptes mesurent l'activité détectée, pas des surfaces brûlées.
-- Les fichiers NRT n'ont pas la colonne `type` : les mois NRT peuvent compter quelques sources fixes
-  en plus (de l'ordre de 0,4 % d'après l'archive).
-- Les erreurs de géolocalisation au bord du pays (fenêtre FIRMS par pays) ne sont pas corrigées.
+1. **Main series: S-NPP alone; sensors are never added together.** S-NPP, NOAA-20 and NOAA-21 often
+   pass over the same fire a few minutes apart, so adding their detections would count the same fire
+   two or three times. Instead of a space-time de-duplication (fragile and slow), S-NPP is fixed as the
+   main series: it is the only VIIRS series covering 2012 to 2026. NOAA-20 and NOAA-21 are used **only
+   to cross-check** that series (see Key results).
+2. **Nominal and high confidence, on a common scale.** VIIRS gives `l`/`n`/`h`. MODIS gives 0-100,
+   converted with the FIRMS thresholds: low < 30, nominal 30-79, high ≥ 80. Low-confidence detections
+   are dropped for both sensors.
+3. **Archive: `type = 0` only** (presumed vegetation fire), which removes volcanoes, static land sources
+   and offshore detections (gas flares). NRT files have no such column, so they keep everything. Effect
+   measured on the S-NPP archive: 0.42% of detections.
+4. **MODIS → S-NPP-equivalent calibration per year, never a single constant.** For each year:
+   factor = S-NPP detections / MODIS detections, over months that are complete for both sensors and
+   not provisional. A year without overlap would take the nearest year's factor (and say so).
+5. **Incomplete months are left empty, not extrapolated.** A month has a value for a sensor only if it
+   is covered from its first to its last day: January 2012 (data start on the 20th), November 2026 for
+   S-NPP (NRT ends on 2 November), August and September 2026 for MODIS (gap).
+6. **Historical median** of each calendar month over 2012-2025 (167 reference months, excluding
+   incomplete and provisional months). Anomaly = (value − median) / median × 100.
+7. **Provisional data**: every month containing NRT data, plus the last 5 months (July to November
+   2026). They are hatched and announced in a banner; 2026 is marked incomplete.
+8. **"Cividis" palette** (8 classes), readable with color vision deficiency and ordered in grayscale.
+   Checked by `check_palette.py` (gray levels 30 to 224, at least 22 between two classes) and by a
+   grayscale screenshot of the page. Every cell also shows its value as a number.
 
-## Résultats clés
+## Limitations
 
-- **Facteur S-NPP/MODIS** : 4,01 (2012) → 4,69 (2025), moyenne 4,30, écart-type 0,23 (14 années
-  complètes). Il **augmente** depuis 2020 (4,12 → 4,69) : une constante unique biaiserait la
-  comparaison entre les deux époques, d'où le facteur par année.
-- **Vérification de la série principale** sur les mois de référence : NOAA-20 corrélation 0,999 avec
-  S-NPP (93 mois), rapport 1,00 ; NOAA-21 corrélation 0,998 (34 mois), rapport 0,96. La série S-NPP
-  est donc stable et cohérente avec les deux autres VIIRS, sans doublons ajoutés.
-- **Saisonnalité** : la saison des feux va de novembre à mars (médianes : janvier 52 007, février
-  55 432, décembre 42 407 détections) ; juillet à septembre en compte moins de 250.
-- **Total annuel S-NPP** : de 153 503 (2013) à 208 332 (2020), le maximum ; 189 714 en 2025.
-- **2026** : janvier (−25 %) et février (−32 %), les mois les plus actifs, sont sous la médiane ; mars
-  (+42 %) au-dessus. Juillet à novembre 2026 sont provisoires.
+- **MODIS gap from 30 August to 8 September 2026** (no data in either the archive or NRT): August and
+  September 2026 have no MODIS value. Shown in the application. The S-NPP series is not affected.
+- **The 2026 factor is 5.942, from 6 months only** (January to June). It is well outside the 2012-2025
+  range (3.951 to 4.693), so read it with caution (incomplete year; possibly the end of life of the
+  Terra satellite). The 2026 MODIS equivalent depends on it.
+- **Rainy season** (June to September): the median drops below 500 detections (104 in September), so a
+  few dozen detections give ±70%. The application says so in the month details.
+- **Days without detections**: FIRMS files list fires only, so a day without any detection cannot be
+  told apart from a day without data. The archives have breaks of more than 3 days: MODIS 134 (121
+  starting between June and September), S-NPP 24 (20 between June and September), mostly the quiet
+  rainy season. Two S-NPP breaks fall in the fire season and may be data outages: **2 to 7 November
+  2024** and **9 to 13 March 2026**. Those months are kept as complete; their counts may be slightly
+  low. Only the 2026 MODIS gap above is a confirmed outage.
+- A detection is not a fire: a large fire gives several pixels, a small fire under clouds gives none.
+  Counts measure detected activity, not burned area.
+- NRT files have no `type` column: NRT months may include a few static sources (about 0.4% based on
+  the archive).
+- Geolocation errors at the country border (FIRMS country window) are not corrected.
 
-## Reproduire
+## Key results
 
-Prérequis : Python 3.13 (pandas n'a pas encore de version pour 3.15) et pandas.
+All figures below come from `aggregats.json`.
+
+- **S-NPP/MODIS factor**: 4.008 (2012) to 4.693 (2025); mean 4.30, standard deviation 0.23 over the
+  14 years 2012-2025 (2012 from 11 months, the others from 12); minimum 3.951 (2015). It **rises** after 2020 (4.120 → 4.693), so a single
+  constant would bias any comparison between the two periods. Hence one factor per year.
+- **Cross-check of the main series** over the reference months: NOAA-20 correlation 0.999 with S-NPP
+  (93 months), ratio 0.996; NOAA-21 correlation 0.998 (34 months), ratio 0.961. The S-NPP series is
+  stable and consistent with the two other VIIRS sensors, without double counting.
+- **Seasonality**: the fire season runs from November to March (medians: January 52,007, February
+  55,432, December 42,406.5 detections); July to September each have a median below 250.
+- **Annual S-NPP totals** (complete years 2013-2025): from 153,503 (2013) to 208,332 (2020), the
+  maximum; 189,714 in 2025.
+- **Notable months**: November 2023 at −72.9% (2,847 detections against a median of 10,510.5), a
+  strong anomaly in the fire season itself.
+- **2026**: January (−24.9%) and February (−32.2%), the most active months, were below their median;
+  March (+41.6%) above. July to November 2026 are provisional.
+
+## Reproduce
+
+Requirements: Python 3.13 (pandas has no release for Python 3.15 yet) and pandas.
 
 ```
 pip install pandas
-python test_harmonize.py      # 10 tests sur données synthétiques
-python inspect_archives.py    # contrôle des fichiers réels de data/ (dates, satellites, confiance, trous)
-python harmonize.py           # écrit aggregats.json, grille.json et donnees.js
-python check_palette.py       # palette en niveaux de gris
+python test_harmonize.py      # 10 tests on synthetic data
+python inspect_archives.py    # checks the real files in data/ (dates, satellites, confidence, gaps)
+python harmonize.py           # writes aggregats.json, grille.json and donnees.js
+python check_palette.py       # grayscale palette check
 ```
 
-`data/` (archives FIRMS brutes, non versionnées) : télécharger depuis
-https://firms.modaps.eosdis.nasa.gov/download/ les archives « Country : Cameroon » MODIS C6.1 et VIIRS
-S-NPP, NOAA-20, NOAA-21, et les extraire dans `data/modis`, `data/snpp`, `data/noaa20`, `data/noaa21`.
-Aucune clé API n'est utilisée.
+`data/` (raw FIRMS archives, not versioned): download the "Country: Cameroon" archives for MODIS C6.1
+and VIIRS S-NPP, NOAA-20, NOAA-21 from https://firms.modaps.eosdis.nasa.gov/download/ and extract them
+into `data/modis`, `data/snpp`, `data/noaa20`, `data/noaa21`. No API key is used.
 
-## Fichiers
+## Files
 
-| Fichier | Rôle |
+| File | Role |
 |---|---|
-| `index.html` | application (carte, calendrier, export CSV) |
-| `donnees.js` | agrégats chargés par la page (même contenu que les deux JSON) |
-| `aggregats.json` | mois × année : S-NPP, MODIS, équivalent S-NPP, facteur, NOAA-20/21, médiane, anomalie, provisoire, complétude |
-| `grille.json` | détections S-NPP par cellule de 0,5° et par mois (carte) |
-| `harmonize.py` | chargement, confiance commune, filtres, calibration, médianes, anomalies |
-| `test_harmonize.py` | tests unitaires |
-| `inspect_archives.py` | inspection des fichiers réels |
-| `check_palette.py` | vérification de la palette en niveaux de gris |
+| `index.html` | the application (map, calendar, CSV export) |
+| `donnees.js` | aggregates loaded by the page (same content as the two JSON files) |
+| `aggregats.json` | month × year: S-NPP, MODIS, S-NPP equivalent, factor, NOAA-20/21, median, anomaly, provisional flag, completeness |
+| `grille.json` | S-NPP detections per 0.5° cell and per month (map); no individual detections |
+| `harmonize.py` | loading, common confidence scale, filters, calibration, medians, anomalies |
+| `test_harmonize.py` | unit tests |
+| `inspect_archives.py` | inspection of the real files |
+| `check_palette.py` | grayscale palette check |
 
-## Licence des données
+The repository contains only aggregates: no raw detection, no key, no personal data.
 
-Données NASA FIRMS : libres d'utilisation avec citation (voir ci-dessus). Fond de carte OpenStreetMap :
-ODbL.
+## Use of AI
+
+This project was built with the help of **Claude** (Anthropic), an AI assistant, working under the
+team's direction and review:
+
+- **Code**: Claude wrote `harmonize.py`, `test_harmonize.py`, `inspect_archives.py`,
+  `check_palette.py` and `index.html` (layout, calendar, map, CSV export), from a written plan and the
+  team's decisions (S-NPP as main series, per-year calibration, confidence filter, flagged gaps).
+- **Data checks**: Claude ran the tests and the inspection of the real FIRMS files, and compared the
+  figures in this README with `aggregats.json`.
+- **Documentation**: Claude drafted this README, the English translation of the interface, the
+  submission description and the demo outline.
+
+The data themselves are NASA FIRMS data, unchanged; no AI-generated data, image or figure is presented
+as observed data. The team reviewed and approved the choices and the results.
+
+## Data license
+
+NASA FIRMS data: free to use with the citation above. OpenStreetMap base map: ODbL.

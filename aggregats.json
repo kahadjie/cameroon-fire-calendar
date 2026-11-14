@@ -1,9 +1,9 @@
 {
  "meta": {
-  "title": "Points chauds de feu au Cameroun, MODIS et VIIRS harmonisés",
+  "title": "Cameroon fire hotspots, MODIS and VIIRS harmonized",
   "source": "NASA FIRMS (Fire Information for Resource Management System), https://firms.modaps.eosdis.nasa.gov",
-  "generated": "2026-11-14T09:50Z",
-  "main_series": "S-NPP (VIIRS 375 m), confiance nominale et haute, archive type 0",
+  "generated": "2026-11-14T10:03Z",
+  "main_series": "S-NPP (VIIRS 375 m), nominal and high confidence, archive type 0",
   "coverage": {
    "snpp": [
     "2012-01-20",
@@ -31,7 +31,7 @@
    2012,
    2025
   ],
-  "provisional_rule": "mois avec données NRT, et les 5 derniers mois",
+  "provisional_rule": "months with NRT data, and the last 5 months",
   "snpp_archive_static_share": 0.0042,
   "grid_deg": 0.5
  },
