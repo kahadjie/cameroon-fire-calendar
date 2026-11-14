@@ -43,7 +43,7 @@ them on the page on the day of recording (the summary sentence is generated, not
    several satellites; no consistent series to answer "is this month unusual?".
 3. **NASA data used**: NASA FIRMS, Cameroon, archive and near real-time; MODIS C6.1 (Aqua, Terra),
    VIIRS 375 m (Suomi NPP, NOAA-20, NOAA-21), 2012 to 2 November 2026 for the main series (Suomi NPP);
-   NOAA-20 and NOAA-21 to 14 November 2026. Citation: LANCE FIRMS, NASA ESDIS.
+   NOAA-20 and NOAA-21 to 13 November 2026. Citation: LANCE FIRMS, NASA ESDIS.
 4. **Method**: Suomi NPP as main series (no double counting); confidence nominal and high; MODIS
    rescaled with one factor per year (4.008 in 2012 to 4.693 in 2025); usual level = 2012-2025 median.
 5. **User experience** (live): summary sentence (latest final month; provisional month apart), calendar, most active month, map, compare two years,

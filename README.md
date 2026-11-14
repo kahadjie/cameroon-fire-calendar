@@ -17,8 +17,8 @@ NASA Space Apps Challenge 2026, challenge "Harmonizing MODIS and VIIRS fire hots
   provisional month is shown apart, on its own line. Main series data end on
   2 November 2026, the last day Suomi NPP delivers near-real-time data.
 - **One figure**: on years left out of the calibration, the error of the MODIS → VIIRS rescaling is
-  4.49% with one constant factor and 2.48% when MODIS is matched with Aqua only (`python validate.py`
-  reproduces it; the published series still uses each year's own factor).
+  4.49% with one constant factor and 2.48% when MODIS is matched with Aqua only (held-out test, see
+  Key results; the published series still uses each year's own factor).
 - **Try it**: https://kahadjie.github.io/cameroon-fire-calendar/
 
 ![The application: summary sentence, the problem, and the month × year calendar](docs/screenshot.png)
@@ -73,9 +73,8 @@ Base map: © OpenStreetMap contributors (ODbL). No other data source is used.
 4. **MODIS → S-NPP-equivalent calibration per year, never a single constant.** For each year:
    factor = S-NPP detections / MODIS detections, over months that are complete for both sensors and
    not provisional. A year without overlap would take the nearest year's factor (and say so).
-   Factors range from 4.008 (2012) to 4.693 (2025); 5.942 for 2026, from six months. Validation: 4.49%
-   average error with one constant factor, 2.48% when MODIS is matched with Aqua only (reproduced by
-   `validate.py`; the published series uses each year's own factor).
+   Factors range from 4.008 (2012) to 4.693 (2025); 5.942 for 2026, from six months. The held-out
+   test of this choice is in Key results.
 5. **Incomplete months are left empty, not extrapolated.** A month has a value for a sensor only if it
    is covered from its first to its last day: January 2012 (data start on the 20th), November 2026 for
    S-NPP (NRT ends on 2 November), August and September 2026 for MODIS (no MODIS detection in the
@@ -138,9 +137,9 @@ All figures below come from `aggregats.json`.
   February 55,432).
 - **Held-out test of the rescaling** (each full year 2013-2025 left out in turn, `python validate.py`):
   4.49% average error with one constant factor, 3.25% from the adjacent years, 3.12% from a linear
-  trend, 2.48% when MODIS is matched with Aqua only (same time of day; this variant needs the raw
-  files in `data/`, the others need `aggregats.json` only). This is a comparison: the published series
-  uses each year's own all-MODIS factor.
+  trend, 2.48% when MODIS is matched with Aqua only (same time of day). 4.49%, 3.25% and 3.12% are
+  reproduced from `aggregats.json`; 2.48% needs the raw files in `data/` (not versioned). This is a
+  comparison: the published series uses each year's own all-MODIS factor.
 
 ## CSV download
 
@@ -219,8 +218,10 @@ Done:
 - [x] Submission text — [submission/DESCRIPTION.md](submission/DESCRIPTION.md)
 
 Remaining:
-- [ ] Record the demo video from [docs/DEMO_PLAN.md](docs/DEMO_PLAN.md)
-- [ ] Submit the NASA Space Apps form (description, app link, video) before 15 November 2026, 23:59 (Cameroon)
+- [ ] Project demonstration from [docs/DEMO_PLAN.md](docs/DEMO_PLAN.md): the 7-slide presentation (a
+      30-second video is optional)
+- [ ] Submit the NASA Space Apps form ([submission/FORM.md](submission/FORM.md)) before 15 November
+      2026, 23:59 (Cameroon)
 - [ ] Check with NASA FIRMS whether MODIS has data from 30 August to 8 September 2026
 
 ## Roadmap

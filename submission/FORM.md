@@ -26,9 +26,9 @@ generated sentence that says whether the latest final month is above or below it
 click gives the map, and every value shown exports to CSV. Forest services, researchers and
 journalists can see in seconds whether this season is unusual, on a phone and in grayscale.
 
-## Link to project demo (30 seconds)
+## Project demonstration
 
-[paste the video link]
+[paste the link to the 7-slide presentation (Google Slides); a 30-second video is optional]
 
 ## Link to final project
 
@@ -54,8 +54,10 @@ near-real-time data are hatched as provisional.
 
 **How we checked it.** Each full year 2013-2025 was left out in turn and its factor predicted from
 the other years: 4.49% average error with one constant factor, 2.48% when MODIS is matched with Aqua
-only (same time of day as VIIRS). The test is reproducible with `python validate.py` in the
-repository. Unit tests cover the confidence scale, the filters, the per-year factor and the medians.
+only (same time of day as VIIRS). The 2.48% figure is measured and shown in the app; the published
+series still uses each year's own factor. With `python validate.py` in the repository, 4.49%, 3.25%
+and 3.12% are reproduced from aggregats.json; 2.48% needs the raw files in data/ (not versioned).
+Unit tests cover the confidence scale, the filters, the per-year factor and the medians.
 
 **Limitations.** Detections are not burned area. Low-season percentages are unstable (a few dozen
 detections give ±70% in September). July to November 2026 are provisional. The downloaded files
