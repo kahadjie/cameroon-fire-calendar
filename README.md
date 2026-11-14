@@ -73,6 +73,9 @@ Base map: © OpenStreetMap contributors (ODbL). No other data source is used.
 4. **MODIS → S-NPP-equivalent calibration per year, never a single constant.** For each year:
    factor = S-NPP detections / MODIS detections, over months that are complete for both sensors and
    not provisional. A year without overlap would take the nearest year's factor (and say so).
+   Factors range from 4.008 (2012) to 4.693 (2025); 5.942 for 2026, from six months. Validation: 4.49%
+   average error with one constant factor, 2.48% when MODIS is matched with Aqua only (measured on the
+   development branch; the published series uses each year's own factor).
 5. **Incomplete months are left empty, not extrapolated.** A month has a value for a sensor only if it
    is covered from its first to its last day: January 2012 (data start on the 20th), November 2026 for
    S-NPP (NRT ends on 2 November), August and September 2026 for MODIS (no MODIS detection in the
@@ -107,6 +110,8 @@ Base map: © OpenStreetMap contributors (ODbL). No other data source is used.
   low. None of these breaks is confirmed as a data outage.
 - A detection is not a fire: a large fire gives several pixels, a small fire under clouds gives none.
   Counts measure detected activity, not burned area.
+- **Recent months may change**: 2026 is incomplete, and the provisional months (July to November 2026)
+  can still be revised.
 - NRT files have no `type` column: NRT months may include a few static sources (about 0.4% based on
   the archive).
 - Geolocation errors at the country border (FIRMS country window) are not corrected.
