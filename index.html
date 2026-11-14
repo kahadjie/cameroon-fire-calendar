@@ -23,6 +23,7 @@ a{color:var(--focus)}
 .lead{font-size:1rem}
 .summary{font-size:1.15rem;font-weight:600;margin:.6rem 0 .2rem}
 .validity{font-size:.88rem;color:var(--muted)}
+.provline{font-size:.92rem;margin:.2rem 0;padding-left:8px;border-left:4px solid var(--warn-fg)}
 .primary{background:var(--accent);color:var(--accent-fg);border-color:var(--accent);font-weight:600;margin-top:10px}
 .banner{background:var(--warn);color:var(--warn-fg);border-radius:8px;padding:8px 12px;margin:10px 0;font-size:.9rem}
 .banner strong{font-weight:600}
@@ -73,6 +74,7 @@ footer{margin:20px 0 8px;font-size:.82rem;color:var(--muted)}
     <h1>Cameroon fire calendar</h1>
     <p class="lead">NASA's two fire sensors, <span class="term" tabindex="0" data-tip="MODIS: NASA instrument on the Terra and Aqua satellites, watching fires since 2000 with 1 km pixels.">MODIS</span> and <span class="term" tabindex="0" data-tip="VIIRS: newer NASA/NOAA instrument (Suomi NPP since 2012, then NOAA-20 and NOAA-21) with 375 m pixels; it sees many more small fires.">VIIRS</span>, count fires differently; this calendar puts them on one scale so you can see, month by month since 2012, whether Cameroon had more or fewer fires than usual.</p>
     <p class="summary" id="summary" aria-live="polite">Loading…</p>
+    <p class="provline" id="provLine" hidden></p>
     <p class="validity" id="validity">Check on years left out of the calibration: average error 2.48% when MODIS is matched with Aqua only (same time of day), against 4.49% with one constant factor (measured on the development branch; the published series still uses each year's own factor).</p>
     <button class="primary" id="mostActive" type="button">Show the most active month</button>
   </header>
@@ -152,6 +154,7 @@ footer{margin:20px 0 8px;font-size:.82rem;color:var(--muted)}
 </main>
 
 <script src="donnees.js"></script>
+<script src="summary.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
 "use strict";
@@ -177,15 +180,12 @@ function fmt(v){if(v==null)return"—";if(state.view==="anomaly")return(v>0?"+":
 const pct = v => `${Math.abs(Math.round(v))}% ${v>=0?"above":"below"}`;
 let countBins = [];
 
-// Conclusion generated from the data only (no figure written by hand).
+// Conclusion generated from the data only (summary.js, tested by tests/summary_test.html).
 function renderSummary(){
-  const withValue = AGG.months.filter(r => r.anomaly_pct != null);
-  const last = withValue[withValue.length - 1];
   const snppEnd = AGG.meta.coverage.snpp[1];
-  const thisYear = withValue.filter(r => r.year === last.year);
-  const above = thisYear.filter(r => r.anomaly_pct > 0).length;
-  const prov = thisYear.filter(r => r.provisional).length;
-  $("summary").textContent = `Latest month of the main series: ${LONG[last.month-1]} ${last.year}, ${pct(last.anomaly_pct)} its usual level${last.provisional?" (provisional)":""}. In ${last.year}, ${above} of ${thisYear.length} months so far were above usual${prov?` (${prov} of these ${thisYear.length} months are provisional)`:""}. Main series (Suomi NPP) data end on ${fmtDate(snppEnd)}.`;
+  const s = FireSummary.summaryParts(AGG.months, snppEnd);
+  $("summary").textContent = `${s.lead} ${s.end}`;
+  if (s.provisional) { $("provLine").textContent = s.provisional; $("provLine").hidden = false; }
   $("snppEnd").textContent = fmtDate(snppEnd);
 }
 

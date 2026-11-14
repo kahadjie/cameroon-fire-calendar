@@ -8,8 +8,8 @@ them on the page on the day of recording (the summary sentence is generated, not
 
 1. **Top of the page**: "NASA's two fire sensors, MODIS and VIIRS, count fires differently, so nobody
    can read one consistent fire history for Cameroon."
-2. **Summary sentence**: "Our calendar puts them on one scale: the latest month of the main series,
-   October 2026, was 90% above its usual level — data end on 2 November 2026."
+2. **Summary sentence**: "Our calendar puts them on one scale: the latest final month of the main
+   series, June 2026, was 65% above its usual level — main series data end on 2 November 2026."
 3. **Calendar**: "Every month since 2012, colored by how far it is from usual; one click gives the map."
 4. **Validation line**: "We tested the rescaling on years left out: 4.49% error with one constant
    factor, 2.48% when MODIS is matched with Aqua only."
@@ -20,8 +20,9 @@ them on the page on the day of recording (the summary sentence is generated, not
    researchers and journalists in Cameroon ask, and NASA has the data to answer it."
 2. **The problem** (0:15): "But MODIS and VIIRS see fires differently: VIIRS records about four times
    more detections, so their counts cannot be compared."
-3. **Summary sentence** (0:30): "The page answers first: the latest month of the main series, Suomi NPP,
-   is October 2026, 90% above usual, provisional; the main series ends on 2 November 2026."
+3. **Summary sentence** (0:30): "The page answers first: the latest final month of the main series,
+   Suomi NPP, is June 2026, 65% above usual; October 2026 reads 90% above but is provisional, so it is
+   shown apart; the main series ends on 2 November 2026."
 4. **Calendar** (0:45): "Each cell is a month since 2012; dark is below usual, yellow above; hatched
    months are provisional; hover any underlined word for an explanation."
 5. **Show the most active month** (1:00): "One button jumps to the most active month on record,
@@ -45,7 +46,7 @@ them on the page on the day of recording (the summary sentence is generated, not
    NOAA-20 and NOAA-21 to 14 November 2026. Citation: LANCE FIRMS, NASA ESDIS.
 4. **Method**: Suomi NPP as main series (no double counting); confidence nominal and high; MODIS
    rescaled with one factor per year (4.008 in 2012 to 4.693 in 2025); usual level = 2012-2025 median.
-5. **User experience** (live): summary sentence, calendar, most active month, map, compare two years,
+5. **User experience** (live): summary sentence (latest final month; provisional month apart), calendar, most active month, map, compare two years,
    CSV download; works on a phone (390 px) and in grayscale.
 6. **Validity**: cross-check with NOAA-20/21 (correlation 0.999 / 0.998); held-out test 4.49% (one
    constant factor) vs 2.48% (Aqua only, measured, not applied); provisional months hatched; low-season

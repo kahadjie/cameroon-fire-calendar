@@ -1,0 +1,37 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>summary test</title>
+<pre id="out">RUNNING</pre>
+<script src="../summary.js"></script>
+<script>
+"use strict";
+// Synthetic months only: the sentences must follow the data, whatever they are.
+const m = (year, month, anomaly_pct, provisional) => ({ year, month, anomaly_pct, provisional });
+const base = [m(2026,1,-24.9,false), m(2026,2,-32.2,false), m(2026,3,41.6,false), m(2026,6,64.8,false),
+              m(2026,9,12.5,true), m(2026,10,89.7,true), m(2026,11,null,true)];
+const failures = [];
+const check = (name, got, want) => { if (got !== want) failures.push(`${name}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`); };
+
+let s = FireSummary.summaryParts(base, "2026-11-02");
+check("lead uses the latest final month", s.lead, "Latest final month of the main series: June 2026, 65% above its usual level. In 2026, 2 of 4 final months were above usual.");
+check("provisional line apart", s.provisional, "Provisional: October 2026 reads 90% above its usual level, from near real-time data that may still change.");
+check("end date", s.end, "Main series (Suomi NPP) data end on 2 November 2026.");
+
+// The data change: September becomes final.
+s = FireSummary.summaryParts(base.map(r => r.month === 9 ? { ...r, provisional: false } : r), "2026-11-02");
+check("lead follows the data", s.lead, "Latest final month of the main series: September 2026, 13% above its usual level. In 2026, 3 of 5 final months were above usual.");
+
+// No provisional month at all: no provisional line.
+s = FireSummary.summaryParts(base.filter(r => !r.provisional), "2026-06-30");
+check("no provisional line", s.provisional, null);
+
+// Only provisional months: no invented final month.
+s = FireSummary.summaryParts(base.filter(r => r.provisional), "2026-11-02");
+check("no final month", s.lead, "No final month of the main series yet.");
+
+// Below usual and exactly usual.
+check("below", FireSummary.summaryParts([m(2025,2,-32.2,false)], null).lead.includes("32% below its usual level"), true);
+check("at usual", FireSummary.summaryParts([m(2025,2,0.3,false)], null).lead.includes("at its usual level"), true);
+
+document.getElementById("out").textContent = failures.length ? "FAIL\n" + failures.join("\n") : "PASS";
+</script>

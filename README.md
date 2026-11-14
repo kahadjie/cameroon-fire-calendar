@@ -13,7 +13,8 @@ NASA Space Apps Challenge 2026, challenge "Harmonizing MODIS and VIIRS fire hots
   is unusually active.
 - **Solution**: a calendar of every month since 2012 for Cameroon, on one scale: Suomi NPP (VIIRS) is
   the reference and MODIS is rescaled year by year. The page opens on a generated sentence: the latest
-  month of the main series and how far it is from its usual level. Main series data end on
+  final (not provisional) month of the main series and how far it is from its usual level; the latest
+  provisional month is shown apart, on its own line. Main series data end on
   2 November 2026, the last day Suomi NPP delivers near-real-time data.
 - **One figure**: on years left out of the calibration, the error of the MODIS → VIIRS rescaling is
   4.49% with one constant factor and 2.48% when MODIS is matched with Aqua only (measured; the
@@ -164,6 +165,7 @@ Requirements: Python 3.13 (pandas has no release for Python 3.15 yet) and pandas
 ```
 pip install pandas
 python test_harmonize.py      # 10 tests on synthetic data
+python -m pytest              # the same 10 tests + the summary-sentence test (11)
 python inspect_archives.py    # checks the real files in data/ (dates, satellites, confidence, breaks)
 python harmonize.py           # writes aggregats.json, grille.json and donnees.js
 python check_palette.py       # grayscale palette check
@@ -185,6 +187,8 @@ into `data/modis`, `data/snpp`, `data/noaa20`, `data/noaa21`. No API key is used
 | `test_harmonize.py` | unit tests |
 | `inspect_archives.py` | inspection of the real files |
 | `check_palette.py` | grayscale palette check |
+| `summary.js` | the summary sentences at the top of the page, computed from the data |
+| `test_summary.py`, `tests/summary_test.html` | test of those sentences in a headless browser (skipped if none is installed) |
 | `docs/AUDIT.md` | audit against the five judging criteria |
 | `docs/DEMO_PLAN.md` | 30-second and 2-minute scripts, 7 slides |
 | `submission/DESCRIPTION.md` | submission text |

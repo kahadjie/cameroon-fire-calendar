@@ -17,7 +17,7 @@ day Suomi NPP delivers near-real-time data. Each cell says how far the month is 
 high confidence; presumed vegetation fires only. Suomi NPP is the main series, so no fire is counted
 twice; NOAA-20 and NOAA-21 cross-check it (correlation 0.999 and 0.998). MODIS is rescaled with one
 factor per year (4.008 in 2012 to 4.693 in 2025). Held-out test: 4.49% error with one constant
-factor, 2.48% with Aqua only (measured, not yet applied).
+factor, 2.48% with Aqua only (measured, not applied to the published series).
 
 **Impact.** Forest services, researchers and journalists can see in seconds whether this season is
 unusual, on a phone and in grayscale.
