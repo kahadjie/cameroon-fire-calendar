@@ -1,35 +1,36 @@
-# Cameroon fire calendar: MODIS and VIIRS harmonized
+# Cameroon Fire Season Check
 
 NASA Space Apps Challenge 2026, challenge "Harmonizing MODIS and VIIRS fire hotspots".
-
-**Live app: https://kahadjie.github.io/cameroon-fire-calendar/**
-
 **Team WESH**, Cameroon: Kenmoe Kahadjie Felix (sole member).
 
-> **Branch `jury-v2`** (not the submitted version, which is on `main`): `index.html` answers one
-> question — was the last fire season unusual? — with fire radiative power, pixel geometry, overpass
-> time, robust z-scores and bootstrap intervals (`analysis.py`, `stats.py`, `jury.json`). The submitted
-> calendar is kept as `calendar.html`. One-page summary: [docs/JURY_V2.md](docs/JURY_V2.md); demo:
-> [docs/DEMO_V2.md](docs/DEMO_V2.md). Rebuild: `python analysis.py` (needs `data/`); tests: `python -m pytest`.
+Branch `season-check`. The version submitted to NASA Space Apps is the monthly calendar on `main`
+(live at https://kahadjie.github.io/cameroon-fire-calendar/); this branch is not published on GitHub Pages.
 
 ## In 30 seconds
 
-- **Problem**: NASA's two fire sensors, MODIS and VIIRS, count fires differently (VIIRS records about
-  four times more detections), so nobody can read one consistent fire history to say whether a month
-  is unusually active.
-- **Solution**: a calendar of every month since 2012 for Cameroon, on one scale: Suomi NPP (VIIRS) is
-  the reference and MODIS is rescaled year by year. The page opens on a generated sentence: the latest
-  final (not provisional) month of the main series and how far it is from its usual level; the latest
-  provisional month is shown apart, on its own line. Main series data end on
-  2 November 2026, the last day Suomi NPP delivers near-real-time data.
-- **One figure**: on years left out of the calibration, the error of the MODIS → VIIRS rescaling is
-  4.49% with one constant factor and 2.48% when MODIS is matched with Aqua only (measured; the
-  published series still uses each year's own factor).
-- **Try it**: https://kahadjie.github.io/cameroon-fire-calendar/
+- **Question**: was Cameroon's last fire season unusual compared with every season since 2012?
+- **Answer** (computed from the data): no. The 2025-26 season (November to March) was the lowest of 14
+  seasons, 22% below the usual season, but within the normal year-to-year range (robust z = −1.4,
+  flagged only beyond ±3.5). The answer is the same for October to April and December to February.
+- **One figure**: the cross-sensor check of this product, the same-hour, near-nadir fire radiative
+  power ratio (Suomi NPP / Aqua, daytime), is predicted within 2.63% on years left out, against 4.49%
+  for one constant detection-count ratio.
+- **Try it**: double-click `index.html` (no server needed). One-page method:
+  [docs/SEASON_CHECK.md](docs/SEASON_CHECK.md); demo: [docs/DEMO_SEASON_CHECK.md](docs/DEMO_SEASON_CHECK.md).
+- **Rebuild**: `python analysis.py` (needs `data/`, writes `season.json` and `season.js`); tests:
+  `python -m pytest`.
 
-![The application: summary sentence, the problem, and the month × year calendar](docs/screenshot.png)
+Two validation figures exist in this project and answer different questions: **2.63%** (this product)
+answers "how steady is the MODIS/VIIRS ratio when both look at the same hour and the same pixel size,
+on fire intensity?"; **2.48%** (quoted on `main`, measured on the development branch `global`) answered
+"how well do Aqua detection counts, day and night, predict Suomi NPP counts?".
 
-A static web application (one page, `index.html`, Leaflet from a CDN, no server) that shows, for all of
+## Monthly calendar (`calendar.html`, the submitted version)
+
+![The monthly calendar: summary sentence, the problem, and the month × year calendar](docs/screenshot.png)
+
+`calendar.html` is the submitted page, with the same data (`donnees.js`) as `main`; only its validation
+line now names the cross-sensor check of this product. A static web application (one page, `index.html`, Leaflet from a CDN, no server) that shows, for all of
 Cameroon, a month × year calendar of fire hotspots from 2012 to 2 November 2026 (main series). Each
 month is compared with its **usual level** (the 2012-2025 median of that month). A map shows detections
 per 0.5° cell for the chosen year and months, a "Compare two years" view puts two seasons side by
@@ -137,10 +138,11 @@ All figures below come from `aggregats.json`.
   March (+41.6%) above. July to November 2026 are provisional.
 - **Most active month on record** (Suomi NPP): February 2023, 90,395 detections (usual level for
   February 55,432).
-- **Held-out test of the rescaling** (each full year 2013-2025 left out in turn, measured on the
-  development branch `global`): 4.49% average error with one constant factor, 3.25% from the adjacent
-  years, 2.48% when MODIS is matched with Aqua only (same time of day). This is a comparison: the
-  published series uses each year's own all-MODIS factor.
+- **Held-out test of the rescaling** (each full year 2013-2025 left out in turn, `analysis.py`):
+  4.49% average error with one constant detection-count factor, 3.25% from the adjacent years; the
+  cross-sensor check of this product (same-hour, near-nadir fire radiative power ratio) gives 2.63%.
+  This is a comparison: the calendar uses each year's own all-MODIS count factor. (The 2.48% quoted on
+  `main` is a different comparison, Aqua detection counts day and night, measured on branch `global`.)
 
 ## CSV download
 

@@ -130,8 +130,8 @@ def solar_hour(acq_time: str, longitude: float) -> float:
 
 
 def frp_sum_mw(frps: list[float]) -> float:
-    """Sum of fire radiative power over detections (MW). An index of fire intensity seen at overpass
-    times, not an energy: turning it into energy (MJ) would need the fire duration between overpasses."""
+    """Sum of fire radiative power over detections (MW): an index of fire intensity at overpass times.
+    Nothing is integrated over time, because the data do not say how long each fire burned."""
     return float(sum(f for f in frps if f == f))  # ignores NaN
 
 

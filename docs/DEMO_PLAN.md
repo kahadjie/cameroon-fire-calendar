@@ -1,4 +1,9 @@
-# Demo plan
+# Demo plan (monthly calendar, the submitted version on `main`)
+
+> On branch `season-check`, this plan describes `calendar.html`. Its "2.48%" is the figure quoted on
+> `main` (Aqua detection counts, day and night, measured on branch `global`); the Fire Season Check uses
+> one cross-sensor check instead, 2.63% (same-hour, near-nadir fire radiative power ratio): see
+> [DEMO_SEASON_CHECK.md](DEMO_SEASON_CHECK.md).
 
 App: https://kahadjie.github.io/cameroon-fire-calendar/ · Team WESH:
 Kenmoe Kahadjie Felix. The figures below are those the page computes from the published data; check

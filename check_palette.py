@@ -38,7 +38,7 @@ for i, c in enumerate(colors):
     previous = g
 print("Palette increases in grayscale, step >= 12 between classes:", "YES" if ok else "NO")
 
-# Season page (jury-v2): ordinary bar vs highlighted latest season must differ in gray, not only in color.
+# Season Check page (index.html): ordinary bar vs highlighted latest season must differ in gray, not only in color.
 season = re.search(r"--bar:(#[0-9a-fA-F]{6});--hi:(#[0-9a-fA-F]{6})", pages.get("index.html", ""))
 if season:
     bar, hi = season.groups()

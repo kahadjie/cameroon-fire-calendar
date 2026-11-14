@@ -1,316 +1,1064 @@
 {
  "meta": {
-  "generated": "2026-11-14T11:57Z",
+  "generated": "2026-11-14T13:56Z",
   "country": "Cameroon",
   "source": "NASA FIRMS, https://firms.modaps.eosdis.nasa.gov",
   "main_series": "Suomi NPP (VIIRS 375 m)",
   "snpp_end": "2026-11-02",
-  "season_months": [
-   11,
-   12,
-   1,
-   2,
-   3
-  ],
+  "main_window": "Nov-Mar",
   "z_threshold": 3.5,
-  "near_nadir_factor": 1.5
+  "near_nadir_factor": 1.5,
+  "bootstrap_n": 2000,
+  "validation_method": "frp_aqua_day_nadir",
+  "mad_to_sigma": 1.4826,
+  "ci_level_pct": 95
  },
- "seasons": [
-  {
-   "season": "2012-13",
-   "end_year": 2013,
-   "count": 159983,
-   "frp_mw": 1222082,
-   "n20": null,
-   "poisson_ci95": [
-    159200,
-    160769
+ "windows": {
+  "Nov-Mar": {
+   "months": [
+    11,
+    12,
+    1,
+    2,
+    3
    ],
-   "bootstrap_ci95": [
-    148743,
-    171262
+   "seasons": [
+    {
+     "season": "2012-13",
+     "end_year": 2013,
+     "count": 159983,
+     "frp_mw": 1222082,
+     "n20": null,
+     "poisson_ci95": [
+      159200,
+      160769
+     ],
+     "bootstrap_ci95": [
+      148743,
+      171262
+     ],
+     "dispersion": 205.4,
+     "median_others": 172490.0,
+     "median_others_frp": 1258988.0,
+     "z_count": -0.46,
+     "z_frp": -0.17,
+     "z_n20": null,
+     "pct_vs_median_count": -7.3,
+     "pct_vs_median_frp": -2.9,
+     "rank_from_lowest": 6
+    },
+    {
+     "season": "2013-14",
+     "end_year": 2014,
+     "count": 157442,
+     "frp_mw": 1151400,
+     "n20": null,
+     "poisson_ci95": [
+      156665,
+      158222
+     ],
+     "bootstrap_ci95": [
+      142188,
+      172542
+     ],
+     "dispersion": 466.9,
+     "median_others": 172490.0,
+     "median_others_frp": 1258988.0,
+     "z_count": -0.56,
+     "z_frp": -0.5,
+     "z_n20": null,
+     "pct_vs_median_count": -8.7,
+     "pct_vs_median_frp": -8.5,
+     "rank_from_lowest": 5
+    },
+    {
+     "season": "2014-15",
+     "end_year": 2015,
+     "count": 153165,
+     "frp_mw": 1169791,
+     "n20": null,
+     "poisson_ci95": [
+      152399,
+      153934
+     ],
+     "bootstrap_ci95": [
+      141389,
+      164422
+     ],
+     "dispersion": 267.2,
+     "median_others": 172490.0,
+     "median_others_frp": 1258988.0,
+     "z_count": -0.71,
+     "z_frp": -0.41,
+     "z_n20": null,
+     "pct_vs_median_count": -11.2,
+     "pct_vs_median_frp": -7.1,
+     "rank_from_lowest": 2
+    },
+    {
+     "season": "2015-16",
+     "end_year": 2016,
+     "count": 170559,
+     "frp_mw": 1252305,
+     "n20": null,
+     "poisson_ci95": [
+      169751,
+      171370
+     ],
+     "bootstrap_ci95": [
+      159248,
+      182948
+     ],
+     "dispersion": 256.2,
+     "median_others": 172490.0,
+     "median_others_frp": 1258988.0,
+     "z_count": -0.07,
+     "z_frp": -0.03,
+     "z_n20": null,
+     "pct_vs_median_count": -1.1,
+     "pct_vs_median_frp": -0.5,
+     "rank_from_lowest": 7
+    },
+    {
+     "season": "2016-17",
+     "end_year": 2017,
+     "count": 188259,
+     "frp_mw": 1477942,
+     "n20": null,
+     "poisson_ci95": [
+      187410,
+      189111
+     ],
+     "bootstrap_ci95": [
+      175648,
+      201263
+     ],
+     "dispersion": 264.5,
+     "median_others": 170559.0,
+     "median_others_frp": 1252305.0,
+     "z_count": 0.73,
+     "z_frp": 1.3,
+     "z_n20": null,
+     "pct_vs_median_count": 10.4,
+     "pct_vs_median_frp": 18.0,
+     "rank_from_lowest": 10
+    },
+    {
+     "season": "2017-18",
+     "end_year": 2018,
+     "count": 154240,
+     "frp_mw": 1135123,
+     "n20": null,
+     "poisson_ci95": [
+      153471,
+      155012
+     ],
+     "bootstrap_ci95": [
+      142130,
+      167441
+     ],
+     "dispersion": 285.5,
+     "median_others": 172490.0,
+     "median_others_frp": 1258988.0,
+     "z_count": -0.67,
+     "z_frp": -0.57,
+     "z_n20": null,
+     "pct_vs_median_count": -10.6,
+     "pct_vs_median_frp": -9.8,
+     "rank_from_lowest": 4
+    },
+    {
+     "season": "2018-19",
+     "end_year": 2019,
+     "count": 172923,
+     "frp_mw": 1284034,
+     "n20": 169422,
+     "poisson_ci95": [
+      172109,
+      173740
+     ],
+     "bootstrap_ci95": [
+      156684,
+      189260
+     ],
+     "dispersion": 357.8,
+     "median_others": 170559.0,
+     "median_others_frp": 1252305.0,
+     "z_count": 0.09,
+     "z_frp": 0.15,
+     "z_n20": -2.21,
+     "pct_vs_median_count": 1.4,
+     "pct_vs_median_frp": 2.5,
+     "rank_from_lowest": 9
+    },
+    {
+     "season": "2019-20",
+     "end_year": 2020,
+     "count": 198816,
+     "frp_mw": 1452815,
+     "n20": 203886,
+     "poisson_ci95": [
+      197943,
+      199692
+     ],
+     "bootstrap_ci95": [
+      181389,
+      217106
+     ],
+     "dispersion": 452.8,
+     "median_others": 170559.0,
+     "median_others_frp": 1252305.0,
+     "z_count": 1.17,
+     "z_frp": 1.15,
+     "z_n20": 0.88,
+     "pct_vs_median_count": 16.6,
+     "pct_vs_median_frp": 16.0,
+     "rank_from_lowest": 12
+    },
+    {
+     "season": "2020-21",
+     "end_year": 2021,
+     "count": 197561,
+     "frp_mw": 1564624,
+     "n20": 195817,
+     "poisson_ci95": [
+      196691,
+      198434
+     ],
+     "bootstrap_ci95": [
+      178391,
+      218754
+     ],
+     "dispersion": 325.7,
+     "median_others": 170559.0,
+     "median_others_frp": 1252305.0,
+     "z_count": 1.11,
+     "z_frp": 1.8,
+     "z_n20": 0.6,
+     "pct_vs_median_count": 15.8,
+     "pct_vs_median_frp": 24.9,
+     "rank_from_lowest": 11
+    },
+    {
+     "season": "2021-22",
+     "end_year": 2022,
+     "count": 172490,
+     "frp_mw": 1258988,
+     "n20": 168641,
+     "poisson_ci95": [
+      171677,
+      173306
+     ],
+     "bootstrap_ci95": [
+      157318,
+      188527
+     ],
+     "dispersion": 328.9,
+     "median_others": 170559.0,
+     "median_others_frp": 1252305.0,
+     "z_count": 0.07,
+     "z_frp": 0.03,
+     "z_n20": -2.27,
+     "pct_vs_median_count": 1.1,
+     "pct_vs_median_frp": 0.5,
+     "rank_from_lowest": 8
+    },
+    {
+     "season": "2022-23",
+     "end_year": 2023,
+     "count": 203677,
+     "frp_mw": 1645045,
+     "n20": 203316,
+     "poisson_ci95": [
+      202793,
+      204563
+     ],
+     "bootstrap_ci95": [
+      185964,
+      221583
+     ],
+     "dispersion": 303.3,
+     "median_others": 170559.0,
+     "median_others_frp": 1252305.0,
+     "z_count": 1.37,
+     "z_frp": 2.26,
+     "z_n20": 0.87,
+     "pct_vs_median_count": 19.4,
+     "pct_vs_median_frp": 31.4,
+     "rank_from_lowest": 14
+    },
+    {
+     "season": "2023-24",
+     "end_year": 2024,
+     "count": 154203,
+     "frp_mw": 1113031,
+     "n20": 154206,
+     "poisson_ci95": [
+      153434,
+      154975
+     ],
+     "bootstrap_ci95": [
+      143601,
+      165675
+     ],
+     "dispersion": 142.9,
+     "median_others": 172490.0,
+     "median_others_frp": 1258988.0,
+     "z_count": -0.68,
+     "z_frp": -0.79,
+     "z_n20": -3.48,
+     "pct_vs_median_count": -10.6,
+     "pct_vs_median_frp": -11.6,
+     "rank_from_lowest": 3
+    },
+    {
+     "season": "2024-25",
+     "end_year": 2025,
+     "count": 201935,
+     "frp_mw": 1510502,
+     "n20": 199129,
+     "poisson_ci95": [
+      201055,
+      202818
+     ],
+     "bootstrap_ci95": [
+      186015,
+      216946
+     ],
+     "dispersion": 328.5,
+     "median_others": 170559.0,
+     "median_others_frp": 1252305.0,
+     "z_count": 1.29,
+     "z_frp": 1.49,
+     "z_n20": 0.76,
+     "pct_vs_median_count": 18.4,
+     "pct_vs_median_frp": 20.6,
+     "rank_from_lowest": 13
+    },
+    {
+     "season": "2025-26",
+     "end_year": 2026,
+     "count": 135062,
+     "frp_mw": 974488,
+     "n20": 135064,
+     "poisson_ci95": [
+      134343,
+      135784
+     ],
+     "bootstrap_ci95": [
+      119488,
+      152279
+     ],
+     "dispersion": 329.7,
+     "median_others": 172490.0,
+     "median_others_frp": 1258988.0,
+     "z_count": -1.38,
+     "z_frp": -1.55,
+     "z_n20": -5.08,
+     "pct_vs_median_count": -21.7,
+     "pct_vs_median_frp": -22.6,
+     "rank_from_lowest": 1
+    }
    ],
-   "dispersion": 205.4,
-   "z_count": -0.46,
-   "z_frp": -0.17,
-   "z_n20": null,
-   "pct_vs_median_count": -7.3,
-   "pct_vs_median_frp": -2.9
+   "n_seasons": 14
   },
-  {
-   "season": "2013-14",
-   "end_year": 2014,
-   "count": 157442,
-   "frp_mw": 1151400,
-   "n20": null,
-   "poisson_ci95": [
-    156665,
-    158222
+  "Oct-Apr": {
+   "months": [
+    10,
+    11,
+    12,
+    1,
+    2,
+    3,
+    4
    ],
-   "bootstrap_ci95": [
-    142188,
-    172542
+   "seasons": [
+    {
+     "season": "2012-13",
+     "end_year": 2013,
+     "count": 163851,
+     "frp_mw": 1248460,
+     "n20": null,
+     "poisson_ci95": [
+      163059,
+      164646
+     ],
+     "bootstrap_ci95": [
+      152558,
+      175289
+     ],
+     "dispersion": 198.3,
+     "median_others": 175371.0,
+     "median_others_frp": 1278559.0,
+     "z_count": -0.44,
+     "z_frp": -0.15,
+     "z_n20": null,
+     "pct_vs_median_count": -6.6,
+     "pct_vs_median_frp": -2.4,
+     "rank_from_lowest": 6
+    },
+    {
+     "season": "2013-14",
+     "end_year": 2014,
+     "count": 161325,
+     "frp_mw": 1179355,
+     "n20": null,
+     "poisson_ci95": [
+      160539,
+      162114
+     ],
+     "bootstrap_ci95": [
+      145767,
+      176405
+     ],
+     "dispersion": 375.2,
+     "median_others": 175371.0,
+     "median_others_frp": 1278559.0,
+     "z_count": -0.53,
+     "z_frp": -0.48,
+     "z_n20": null,
+     "pct_vs_median_count": -8.0,
+     "pct_vs_median_frp": -7.8,
+     "rank_from_lowest": 5
+    },
+    {
+     "season": "2014-15",
+     "end_year": 2015,
+     "count": 157492,
+     "frp_mw": 1202065,
+     "n20": null,
+     "poisson_ci95": [
+      156715,
+      158272
+     ],
+     "bootstrap_ci95": [
+      146386,
+      169464
+     ],
+     "dispersion": 152.0,
+     "median_others": 175371.0,
+     "median_others_frp": 1278559.0,
+     "z_count": -0.71,
+     "z_frp": -0.37,
+     "z_n20": null,
+     "pct_vs_median_count": -10.2,
+     "pct_vs_median_frp": -6.0,
+     "rank_from_lowest": 2
+    },
+    {
+     "season": "2015-16",
+     "end_year": 2016,
+     "count": 173802,
+     "frp_mw": 1275628,
+     "n20": null,
+     "poisson_ci95": [
+      172986,
+      174621
+     ],
+     "bootstrap_ci95": [
+      161994,
+      185709
+     ],
+     "dispersion": 198.3,
+     "median_others": 175371.0,
+     "median_others_frp": 1278559.0,
+     "z_count": -0.06,
+     "z_frp": -0.01,
+     "z_n20": null,
+     "pct_vs_median_count": -0.9,
+     "pct_vs_median_frp": -0.2,
+     "rank_from_lowest": 7
+    },
+    {
+     "season": "2016-17",
+     "end_year": 2017,
+     "count": 192045,
+     "frp_mw": 1505080,
+     "n20": null,
+     "poisson_ci95": [
+      191187,
+      192906
+     ],
+     "bootstrap_ci95": [
+      179219,
+      205024
+     ],
+     "dispersion": 162.4,
+     "median_others": 173802.0,
+     "median_others_frp": 1275628.0,
+     "z_count": 0.76,
+     "z_frp": 1.46,
+     "z_n20": null,
+     "pct_vs_median_count": 10.5,
+     "pct_vs_median_frp": 18.0,
+     "rank_from_lowest": 10
+    },
+    {
+     "season": "2017-18",
+     "end_year": 2018,
+     "count": 158388,
+     "frp_mw": 1169775,
+     "n20": null,
+     "poisson_ci95": [
+      157609,
+      159170
+     ],
+     "bootstrap_ci95": [
+      145855,
+      171252
+     ],
+     "dispersion": 205.7,
+     "median_others": 175371.0,
+     "median_others_frp": 1278559.0,
+     "z_count": -0.64,
+     "z_frp": -0.53,
+     "z_n20": null,
+     "pct_vs_median_count": -9.7,
+     "pct_vs_median_frp": -8.5,
+     "rank_from_lowest": 4
+    },
+    {
+     "season": "2018-19",
+     "end_year": 2019,
+     "count": 176377,
+     "frp_mw": 1308648,
+     "n20": null,
+     "poisson_ci95": [
+      175555,
+      177202
+     ],
+     "bootstrap_ci95": [
+      160777,
+      193002
+     ],
+     "dispersion": 286.0,
+     "median_others": 173802.0,
+     "median_others_frp": 1275628.0,
+     "z_count": 0.11,
+     "z_frp": 0.16,
+     "z_n20": null,
+     "pct_vs_median_count": 1.5,
+     "pct_vs_median_frp": 2.6,
+     "rank_from_lowest": 9
+    },
+    {
+     "season": "2019-20",
+     "end_year": 2020,
+     "count": 202018,
+     "frp_mw": 1475760,
+     "n20": null,
+     "poisson_ci95": [
+      201138,
+      202901
+     ],
+     "bootstrap_ci95": [
+      184849,
+      218915
+     ],
+     "dispersion": 226.1,
+     "median_others": 173802.0,
+     "median_others_frp": 1275628.0,
+     "z_count": 1.17,
+     "z_frp": 1.28,
+     "z_n20": null,
+     "pct_vs_median_count": 16.2,
+     "pct_vs_median_frp": 15.7,
+     "rank_from_lowest": 11
+    },
+    {
+     "season": "2020-21",
+     "end_year": 2021,
+     "count": 202375,
+     "frp_mw": 1598744,
+     "n20": null,
+     "poisson_ci95": [
+      201494,
+      203259
+     ],
+     "bootstrap_ci95": [
+      183100,
+      222986
+     ],
+     "dispersion": 197.8,
+     "median_others": 173802.0,
+     "median_others_frp": 1275628.0,
+     "z_count": 1.18,
+     "z_frp": 2.06,
+     "z_n20": null,
+     "pct_vs_median_count": 16.4,
+     "pct_vs_median_frp": 25.3,
+     "rank_from_lowest": 12
+    },
+    {
+     "season": "2021-22",
+     "end_year": 2022,
+     "count": 175371,
+     "frp_mw": 1278559,
+     "n20": null,
+     "poisson_ci95": [
+      174551,
+      176194
+     ],
+     "bootstrap_ci95": [
+      158776,
+      191554
+     ],
+     "dispersion": 275.6,
+     "median_others": 173802.0,
+     "median_others_frp": 1275628.0,
+     "z_count": 0.06,
+     "z_frp": 0.01,
+     "z_n20": null,
+     "pct_vs_median_count": 0.9,
+     "pct_vs_median_frp": 0.2,
+     "rank_from_lowest": 8
+    },
+    {
+     "season": "2022-23",
+     "end_year": 2023,
+     "count": 206550,
+     "frp_mw": 1664000,
+     "n20": null,
+     "poisson_ci95": [
+      205660,
+      207443
+     ],
+     "bootstrap_ci95": [
+      189411,
+      223581
+     ],
+     "dispersion": 158.1,
+     "median_others": 173802.0,
+     "median_others_frp": 1275628.0,
+     "z_count": 1.36,
+     "z_frp": 2.47,
+     "z_n20": null,
+     "pct_vs_median_count": 18.8,
+     "pct_vs_median_frp": 30.4,
+     "rank_from_lowest": 14
+    },
+    {
+     "season": "2023-24",
+     "end_year": 2024,
+     "count": 157537,
+     "frp_mw": 1139690,
+     "n20": null,
+     "poisson_ci95": [
+      156760,
+      158317
+     ],
+     "bootstrap_ci95": [
+      146899,
+      168663
+     ],
+     "dispersion": 134.0,
+     "median_others": 175371.0,
+     "median_others_frp": 1278559.0,
+     "z_count": -0.71,
+     "z_frp": -0.86,
+     "z_n20": null,
+     "pct_vs_median_count": -10.2,
+     "pct_vs_median_frp": -10.9,
+     "rank_from_lowest": 3
+    },
+    {
+     "season": "2024-25",
+     "end_year": 2025,
+     "count": 205503,
+     "frp_mw": 1537630,
+     "n20": null,
+     "poisson_ci95": [
+      204615,
+      206393
+     ],
+     "bootstrap_ci95": [
+      190374,
+      222046
+     ],
+     "dispersion": 277.5,
+     "median_others": 173802.0,
+     "median_others_frp": 1275628.0,
+     "z_count": 1.31,
+     "z_frp": 1.67,
+     "z_n20": null,
+     "pct_vs_median_count": 18.2,
+     "pct_vs_median_frp": 20.5,
+     "rank_from_lowest": 13
+    },
+    {
+     "season": "2025-26",
+     "end_year": 2026,
+     "count": 137673,
+     "frp_mw": 991302,
+     "n20": null,
+     "poisson_ci95": [
+      136947,
+      138402
+     ],
+     "bootstrap_ci95": [
+      122339,
+      153025
+     ],
+     "dispersion": 216.3,
+     "median_others": 175371.0,
+     "median_others_frp": 1278559.0,
+     "z_count": -1.5,
+     "z_frp": -1.78,
+     "z_n20": null,
+     "pct_vs_median_count": -21.5,
+     "pct_vs_median_frp": -22.5,
+     "rank_from_lowest": 1
+    }
    ],
-   "dispersion": 466.9,
-   "z_count": -0.56,
-   "z_frp": -0.5,
-   "z_n20": null,
-   "pct_vs_median_count": -8.7,
-   "pct_vs_median_frp": -8.5
+   "n_seasons": 14
   },
-  {
-   "season": "2014-15",
-   "end_year": 2015,
-   "count": 153165,
-   "frp_mw": 1169791,
-   "n20": null,
-   "poisson_ci95": [
-    152399,
-    153934
+  "Dec-Feb": {
+   "months": [
+    12,
+    1,
+    2
    ],
-   "bootstrap_ci95": [
-    141389,
-    164422
+   "seasons": [
+    {
+     "season": "2012-13",
+     "end_year": 2013,
+     "count": 137623,
+     "frp_mw": 1046410,
+     "n20": null,
+     "poisson_ci95": [
+      136897,
+      138352
+     ],
+     "bootstrap_ci95": [
+      127392,
+      147564
+     ],
+     "dispersion": 198.3,
+     "median_others": 145043.0,
+     "median_others_frp": 1053994.0,
+     "z_count": -0.33,
+     "z_frp": -0.04,
+     "z_n20": null,
+     "pct_vs_median_count": -5.1,
+     "pct_vs_median_frp": -0.7,
+     "rank_from_lowest": 6
+    },
+    {
+     "season": "2013-14",
+     "end_year": 2014,
+     "count": 122343,
+     "frp_mw": 857775,
+     "n20": null,
+     "poisson_ci95": [
+      121658,
+      123030
+     ],
+     "bootstrap_ci95": [
+      109312,
+      135970
+     ],
+     "dispersion": 466.9,
+     "median_others": 145043.0,
+     "median_others_frp": 1053994.0,
+     "z_count": -1.07,
+     "z_frp": -1.27,
+     "z_n20": null,
+     "pct_vs_median_count": -15.7,
+     "pct_vs_median_frp": -18.6,
+     "rank_from_lowest": 2
+    },
+    {
+     "season": "2014-15",
+     "end_year": 2015,
+     "count": 128012,
+     "frp_mw": 967285,
+     "n20": null,
+     "poisson_ci95": [
+      127312,
+      128715
+     ],
+     "bootstrap_ci95": [
+      117987,
+      137649
+     ],
+     "dispersion": 152.0,
+     "median_others": 145043.0,
+     "median_others_frp": 1053994.0,
+     "z_count": -0.81,
+     "z_frp": -0.5,
+     "z_n20": null,
+     "pct_vs_median_count": -11.7,
+     "pct_vs_median_frp": -8.2,
+     "rank_from_lowest": 3
+    },
+    {
+     "season": "2015-16",
+     "end_year": 2016,
+     "count": 155333,
+     "frp_mw": 1139684,
+     "n20": null,
+     "poisson_ci95": [
+      154561,
+      156107
+     ],
+     "bootstrap_ci95": [
+      144641,
+      166779
+     ],
+     "dispersion": 198.3,
+     "median_others": 139133.0,
+     "median_others_frp": 1046410.0,
+     "z_count": 0.97,
+     "z_frp": 0.56,
+     "z_n20": null,
+     "pct_vs_median_count": 11.6,
+     "pct_vs_median_frp": 8.9,
+     "rank_from_lowest": 10
+    },
+    {
+     "season": "2016-17",
+     "end_year": 2017,
+     "count": 150420,
+     "frp_mw": 1158527,
+     "n20": null,
+     "poisson_ci95": [
+      149661,
+      151182
+     ],
+     "bootstrap_ci95": [
+      139435,
+      160738
+     ],
+     "dispersion": 162.4,
+     "median_others": 139133.0,
+     "median_others_frp": 1046410.0,
+     "z_count": 0.47,
+     "z_frp": 0.68,
+     "z_n20": null,
+     "pct_vs_median_count": 8.1,
+     "pct_vs_median_frp": 10.7,
+     "rank_from_lowest": 9
+    },
+    {
+     "season": "2017-18",
+     "end_year": 2018,
+     "count": 129977,
+     "frp_mw": 936002,
+     "n20": null,
+     "poisson_ci95": [
+      129271,
+      130686
+     ],
+     "bootstrap_ci95": [
+      119197,
+      141614
+     ],
+     "dispersion": 205.7,
+     "median_others": 145043.0,
+     "median_others_frp": 1053994.0,
+     "z_count": -0.71,
+     "z_frp": -0.76,
+     "z_n20": null,
+     "pct_vs_median_count": -10.4,
+     "pct_vs_median_frp": -11.2,
+     "rank_from_lowest": 4
+    },
+    {
+     "season": "2018-19",
+     "end_year": 2019,
+     "count": 145043,
+     "frp_mw": 1053994,
+     "n20": null,
+     "poisson_ci95": [
+      144298,
+      145791
+     ],
+     "bootstrap_ci95": [
+      130930,
+      159470
+     ],
+     "dispersion": 286.0,
+     "median_others": 139133.0,
+     "median_others_frp": 1046410.0,
+     "z_count": 0.25,
+     "z_frp": 0.05,
+     "z_n20": null,
+     "pct_vs_median_count": 4.2,
+     "pct_vs_median_frp": 0.7,
+     "rank_from_lowest": 8
+    },
+    {
+     "season": "2019-20",
+     "end_year": 2020,
+     "count": 168757,
+     "frp_mw": 1239139,
+     "n20": null,
+     "poisson_ci95": [
+      167953,
+      169564
+     ],
+     "bootstrap_ci95": [
+      153763,
+      184628
+     ],
+     "dispersion": 452.8,
+     "median_others": 139133.0,
+     "median_others_frp": 1046410.0,
+     "z_count": 1.77,
+     "z_frp": 1.18,
+     "z_n20": null,
+     "pct_vs_median_count": 21.3,
+     "pct_vs_median_frp": 18.4,
+     "rank_from_lowest": 13
+    },
+    {
+     "season": "2020-21",
+     "end_year": 2021,
+     "count": 159295,
+     "frp_mw": 1243620,
+     "n20": null,
+     "poisson_ci95": [
+      158514,
+      160079
+     ],
+     "bootstrap_ci95": [
+      144111,
+      177234
+     ],
+     "dispersion": 183.0,
+     "median_others": 139133.0,
+     "median_others_frp": 1046410.0,
+     "z_count": 1.2,
+     "z_frp": 1.2,
+     "z_n20": null,
+     "pct_vs_median_count": 14.5,
+     "pct_vs_median_frp": 18.8,
+     "rank_from_lowest": 11
+    },
+    {
+     "season": "2021-22",
+     "end_year": 2022,
+     "count": 139133,
+     "frp_mw": 980669,
+     "n20": null,
+     "poisson_ci95": [
+      138403,
+      139866
+     ],
+     "bootstrap_ci95": [
+      126101,
+      152322
+     ],
+     "dispersion": 328.9,
+     "median_others": 145043.0,
+     "median_others_frp": 1053994.0,
+     "z_count": -0.26,
+     "z_frp": -0.42,
+     "z_n20": null,
+     "pct_vs_median_count": -4.1,
+     "pct_vs_median_frp": -7.0,
+     "rank_from_lowest": 7
+    },
+    {
+     "season": "2022-23",
+     "end_year": 2023,
+     "count": 171716,
+     "frp_mw": 1385651,
+     "n20": null,
+     "poisson_ci95": [
+      170905,
+      172530
+     ],
+     "bootstrap_ci95": [
+      157007,
+      187278
+     ],
+     "dispersion": 158.1,
+     "median_others": 139133.0,
+     "median_others_frp": 1046410.0,
+     "z_count": 1.95,
+     "z_frp": 2.07,
+     "z_n20": null,
+     "pct_vs_median_count": 23.4,
+     "pct_vs_median_frp": 32.4,
+     "rank_from_lowest": 14
+    },
+    {
+     "season": "2023-24",
+     "end_year": 2024,
+     "count": 133485,
+     "frp_mw": 958357,
+     "n20": null,
+     "poisson_ci95": [
+      132770,
+      134203
+     ],
+     "bootstrap_ci95": [
+      123459,
+      143947
+     ],
+     "dispersion": 142.9,
+     "median_others": 145043.0,
+     "median_others_frp": 1053994.0,
+     "z_count": -0.52,
+     "z_frp": -0.55,
+     "z_n20": null,
+     "pct_vs_median_count": -8.0,
+     "pct_vs_median_frp": -9.1,
+     "rank_from_lowest": 5
+    },
+    {
+     "season": "2024-25",
+     "end_year": 2025,
+     "count": 166979,
+     "frp_mw": 1246472,
+     "n20": null,
+     "poisson_ci95": [
+      166179,
+      167782
+     ],
+     "bootstrap_ci95": [
+      152801,
+      180770
+     ],
+     "dispersion": 277.5,
+     "median_others": 139133.0,
+     "median_others_frp": 1046410.0,
+     "z_count": 1.66,
+     "z_frp": 1.22,
+     "z_n20": null,
+     "pct_vs_median_count": 20.0,
+     "pct_vs_median_frp": 19.1,
+     "rank_from_lowest": 12
+    },
+    {
+     "season": "2025-26",
+     "end_year": 2026,
+     "count": 102698,
+     "frp_mw": 729529,
+     "n20": null,
+     "poisson_ci95": [
+      102071,
+      103328
+     ],
+     "bootstrap_ci95": [
+      92163,
+      114400
+     ],
+     "dispersion": 329.7,
+     "median_others": 145043.0,
+     "median_others_frp": 1053994.0,
+     "z_count": -2.0,
+     "z_frp": -2.09,
+     "z_n20": null,
+     "pct_vs_median_count": -29.2,
+     "pct_vs_median_frp": -30.8,
+     "rank_from_lowest": 1
+    }
    ],
-   "dispersion": 267.2,
-   "z_count": -0.71,
-   "z_frp": -0.41,
-   "z_n20": null,
-   "pct_vs_median_count": -11.2,
-   "pct_vs_median_frp": -7.1
-  },
-  {
-   "season": "2015-16",
-   "end_year": 2016,
-   "count": 170559,
-   "frp_mw": 1252305,
-   "n20": null,
-   "poisson_ci95": [
-    169751,
-    171370
-   ],
-   "bootstrap_ci95": [
-    159248,
-    182948
-   ],
-   "dispersion": 256.2,
-   "z_count": -0.07,
-   "z_frp": -0.03,
-   "z_n20": null,
-   "pct_vs_median_count": -1.1,
-   "pct_vs_median_frp": -0.5
-  },
-  {
-   "season": "2016-17",
-   "end_year": 2017,
-   "count": 188259,
-   "frp_mw": 1477942,
-   "n20": null,
-   "poisson_ci95": [
-    187410,
-    189111
-   ],
-   "bootstrap_ci95": [
-    175648,
-    201263
-   ],
-   "dispersion": 264.5,
-   "z_count": 0.73,
-   "z_frp": 1.3,
-   "z_n20": null,
-   "pct_vs_median_count": 10.4,
-   "pct_vs_median_frp": 18.0
-  },
-  {
-   "season": "2017-18",
-   "end_year": 2018,
-   "count": 154240,
-   "frp_mw": 1135123,
-   "n20": null,
-   "poisson_ci95": [
-    153471,
-    155012
-   ],
-   "bootstrap_ci95": [
-    142130,
-    167441
-   ],
-   "dispersion": 285.5,
-   "z_count": -0.67,
-   "z_frp": -0.57,
-   "z_n20": null,
-   "pct_vs_median_count": -10.6,
-   "pct_vs_median_frp": -9.8
-  },
-  {
-   "season": "2018-19",
-   "end_year": 2019,
-   "count": 172923,
-   "frp_mw": 1284034,
-   "n20": 169422.0,
-   "poisson_ci95": [
-    172109,
-    173740
-   ],
-   "bootstrap_ci95": [
-    156684,
-    189260
-   ],
-   "dispersion": 357.8,
-   "z_count": 0.09,
-   "z_frp": 0.15,
-   "z_n20": -2.21,
-   "pct_vs_median_count": 1.4,
-   "pct_vs_median_frp": 2.5
-  },
-  {
-   "season": "2019-20",
-   "end_year": 2020,
-   "count": 198816,
-   "frp_mw": 1452815,
-   "n20": 203886.0,
-   "poisson_ci95": [
-    197943,
-    199692
-   ],
-   "bootstrap_ci95": [
-    181389,
-    217106
-   ],
-   "dispersion": 452.8,
-   "z_count": 1.17,
-   "z_frp": 1.15,
-   "z_n20": 0.88,
-   "pct_vs_median_count": 16.6,
-   "pct_vs_median_frp": 16.0
-  },
-  {
-   "season": "2020-21",
-   "end_year": 2021,
-   "count": 197561,
-   "frp_mw": 1564624,
-   "n20": 195817.0,
-   "poisson_ci95": [
-    196691,
-    198434
-   ],
-   "bootstrap_ci95": [
-    178391,
-    218754
-   ],
-   "dispersion": 325.7,
-   "z_count": 1.11,
-   "z_frp": 1.8,
-   "z_n20": 0.6,
-   "pct_vs_median_count": 15.8,
-   "pct_vs_median_frp": 24.9
-  },
-  {
-   "season": "2021-22",
-   "end_year": 2022,
-   "count": 172490,
-   "frp_mw": 1258988,
-   "n20": 168641.0,
-   "poisson_ci95": [
-    171677,
-    173306
-   ],
-   "bootstrap_ci95": [
-    157318,
-    188527
-   ],
-   "dispersion": 328.9,
-   "z_count": 0.07,
-   "z_frp": 0.03,
-   "z_n20": -2.27,
-   "pct_vs_median_count": 1.1,
-   "pct_vs_median_frp": 0.5
-  },
-  {
-   "season": "2022-23",
-   "end_year": 2023,
-   "count": 203677,
-   "frp_mw": 1645045,
-   "n20": 203316.0,
-   "poisson_ci95": [
-    202793,
-    204563
-   ],
-   "bootstrap_ci95": [
-    185964,
-    221583
-   ],
-   "dispersion": 303.3,
-   "z_count": 1.37,
-   "z_frp": 2.26,
-   "z_n20": 0.87,
-   "pct_vs_median_count": 19.4,
-   "pct_vs_median_frp": 31.4
-  },
-  {
-   "season": "2023-24",
-   "end_year": 2024,
-   "count": 154203,
-   "frp_mw": 1113031,
-   "n20": 154206.0,
-   "poisson_ci95": [
-    153434,
-    154975
-   ],
-   "bootstrap_ci95": [
-    143601,
-    165675
-   ],
-   "dispersion": 142.9,
-   "z_count": -0.68,
-   "z_frp": -0.79,
-   "z_n20": -3.48,
-   "pct_vs_median_count": -10.6,
-   "pct_vs_median_frp": -11.6
-  },
-  {
-   "season": "2024-25",
-   "end_year": 2025,
-   "count": 201935,
-   "frp_mw": 1510502,
-   "n20": 199129.0,
-   "poisson_ci95": [
-    201055,
-    202818
-   ],
-   "bootstrap_ci95": [
-    186015,
-    216946
-   ],
-   "dispersion": 328.5,
-   "z_count": 1.29,
-   "z_frp": 1.49,
-   "z_n20": 0.76,
-   "pct_vs_median_count": 18.4,
-   "pct_vs_median_frp": 20.6
-  },
-  {
-   "season": "2025-26",
-   "end_year": 2026,
-   "count": 135062,
-   "frp_mw": 974488,
-   "n20": 135064.0,
-   "poisson_ci95": [
-    134343,
-    135784
-   ],
-   "bootstrap_ci95": [
-    119488,
-    152279
-   ],
-   "dispersion": 329.7,
-   "z_count": -1.38,
-   "z_frp": -1.55,
-   "z_n20": -5.08,
-   "pct_vs_median_count": -21.7,
-   "pct_vs_median_frp": -22.6
+   "n_seasons": 14
   }
- ],
+ },
  "monthly": [
   {
    "year": 2012,
@@ -2978,6 +3726,12 @@
    "count": null
   }
  ],
+ "monthly_summary": {
+  "flagged": 5,
+  "tested": 177,
+  "low_season": 4,
+  "low_season_median_below": 2000
+ },
  "sensors": {
   "by_year": {
    "2012": {
@@ -3212,8 +3966,8 @@
    "nadir_area_modis_km2": 1.0,
    "max_area_modis_km2": 9.6,
    "max_area_snpp_km2": 0.624,
-   "share_off_nadir_modis": 0.265,
-   "share_off_nadir_snpp": 0.1
+   "pct_off_nadir_modis": 27,
+   "pct_off_nadir_snpp": 10
   },
   "full_years": [
    2013,
@@ -3321,5 +4075,254 @@
    ]
   ]
  },
- "dispersion_median": 314.5
+ "dispersion_median": 314.5,
+ "text": {
+  "answer": "No: the 2025-26 season (November to March) had 135,062 fire detections, the lowest of 14 seasons and 22% below the usual season, but within the normal year-to-year range (robust z = -1.4; flagged only beyond ±3.5). The answer is the same when the season is counted from October to April or from December to February.",
+  "range": "95% range for this season's total: 119,488 to 152,279 detections; the usual season is 172,490.",
+  "frp": "Fire radiative power, an index of fire intensity, tells the same story: 23% below the usual season (robust z = -1.6).",
+  "windows": [
+   [
+    "Nov–Mar",
+    "135,062",
+    "22% below",
+    "-1.4",
+    "no"
+   ],
+   [
+    "Oct–Apr",
+    "137,673",
+    "22% below",
+    "-1.5",
+    "no"
+   ],
+   [
+    "Dec–Feb",
+    "102,698",
+    "29% below",
+    "-2.0",
+    "no"
+   ]
+  ],
+  "seasons": [
+   [
+    "2012-13",
+    "159,983",
+    "148,743",
+    "171,262",
+    "-0.5",
+    false
+   ],
+   [
+    "2013-14",
+    "157,442",
+    "142,188",
+    "172,542",
+    "-0.6",
+    false
+   ],
+   [
+    "2014-15",
+    "153,165",
+    "141,389",
+    "164,422",
+    "-0.7",
+    false
+   ],
+   [
+    "2015-16",
+    "170,559",
+    "159,248",
+    "182,948",
+    "-0.1",
+    false
+   ],
+   [
+    "2016-17",
+    "188,259",
+    "175,648",
+    "201,263",
+    "+0.7",
+    false
+   ],
+   [
+    "2017-18",
+    "154,240",
+    "142,130",
+    "167,441",
+    "-0.7",
+    false
+   ],
+   [
+    "2018-19",
+    "172,923",
+    "156,684",
+    "189,260",
+    "+0.1",
+    false
+   ],
+   [
+    "2019-20",
+    "198,816",
+    "181,389",
+    "217,106",
+    "+1.2",
+    false
+   ],
+   [
+    "2020-21",
+    "197,561",
+    "178,391",
+    "218,754",
+    "+1.1",
+    false
+   ],
+   [
+    "2021-22",
+    "172,490",
+    "157,318",
+    "188,527",
+    "+0.1",
+    false
+   ],
+   [
+    "2022-23",
+    "203,677",
+    "185,964",
+    "221,583",
+    "+1.4",
+    false
+   ],
+   [
+    "2023-24",
+    "154,203",
+    "143,601",
+    "165,675",
+    "-0.7",
+    false
+   ],
+   [
+    "2024-25",
+    "201,935",
+    "186,015",
+    "216,946",
+    "+1.3",
+    false
+   ],
+   [
+    "2025-26",
+    "135,062",
+    "119,488",
+    "152,279",
+    "-1.4",
+    true
+   ]
+  ],
+  "months_intro": "5 of 177 months pass the ±3.5 threshold; 4 of them fall in the low-fire season, when a few hundred detections are enough to stand out.",
+  "months": [
+   [
+    "December 2012",
+    "61,256",
+    "60,772–61,743",
+    "42,264",
+    "+4.1"
+   ],
+   [
+    "June 2014",
+    "975",
+    "915–1,038",
+    "413",
+    "+6.8"
+   ],
+   [
+    "October 2017",
+    "2,661",
+    "2,561–2,764",
+    "1,067",
+    "+4.6"
+   ],
+   [
+    "September 2023",
+    "257",
+    "227–290",
+    "104",
+    "+4.5"
+   ],
+   [
+    "June 2026",
+    "721",
+    "669–776",
+    "438",
+    "+3.6"
+   ]
+  ],
+  "power": "Suomi NPP records about 4.3 times more detections than MODIS, but only 1.2 times more fire radiative power: its smaller pixels catch many small fires that add little to the index of fire intensity. Comparing at the same hour (daytime Suomi NPP vs Aqua) near the centre of the swath makes the comparison steadier from year to year.",
+  "sensors": [
+   [
+    "All passes",
+    "4.32",
+    "5.1%",
+    "1.24",
+    "7.0%",
+    "5.57%"
+   ],
+   [
+    "Same hour (daytime Aqua)",
+    "4.78",
+    "3.2%",
+    "1.50",
+    "4.5%",
+    "3.43%"
+   ],
+   [
+    "Same hour, near nadir",
+    "5.86",
+    "4.8%",
+    "2.36",
+    "3.6%",
+    "2.63%"
+   ]
+  ],
+  "geometry": "Pixel size grows away from the centre of the swath: the mean MODIS pixel covers 1.836 km² (1 km² at nadir, up to 9.6 km²); 27% of MODIS detections are more than 1.5 times their nadir size, against 10% for Suomi NPP.",
+  "check": "Cross-sensor check used by this product: the same-hour, near-nadir fire radiative power ratio (Suomi NPP / Aqua, daytime). Leaving each full year out in turn, it is predicted within 2.63% on average, against 4.49% for one constant detection-count ratio. An independent satellite, NOAA-20, places the season on the same side of the usual level in 6 of 8 seasons. Daily counts vary about 314 times more than a Poisson count would, so the 95% range resamples days instead. Changing the threshold:",
+  "sensitivity": [
+   [
+    "2.0",
+    "20 of 177",
+    "0 of 14",
+    "no"
+   ],
+   [
+    "2.5",
+    "14 of 177",
+    "0 of 14",
+    "no"
+   ],
+   [
+    "3.0",
+    "8 of 177",
+    "0 of 14",
+    "no"
+   ],
+   [
+    "3.5 (chosen in advance)",
+    "5 of 177",
+    "0 of 14",
+    "no"
+   ],
+   [
+    "4.0",
+    "4 of 177",
+    "0 of 14",
+    "no"
+   ],
+   [
+    "5.0",
+    "1 of 177",
+    "0 of 14",
+    "no"
+   ]
+  ],
+  "snpp_end": "2 November 2026",
+  "generated": "Analysis generated 2026-11-14T13:56Z."
+ }
 }

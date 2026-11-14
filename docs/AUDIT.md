@@ -1,5 +1,9 @@
 # Audit against the judging criteria
 
+> Historical audit of the submitted version (`main`, commit `b249d43`). The "2.48%" below is the figure
+> quoted on `main` (Aqua detection counts, day and night, branch `global`); the Fire Season Check on
+> branch `season-check` uses one cross-sensor check, 2.63% (see [SEASON_CHECK.md](SEASON_CHECK.md)).
+
 State audited: branch `main`, commit `b249d43` (before the "plain-language summary" changes).
 Evidence refers to that commit (`git show b249d43:index.html`). Effort: low (< 1 h), medium (1-3 h),
 high (> 3 h). Impact: how much a judge's opinion would change.
