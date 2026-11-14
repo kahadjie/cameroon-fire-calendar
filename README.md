@@ -17,8 +17,9 @@ NASA Space Apps Challenge 2026, challenge "Harmonizing MODIS and VIIRS fire hots
   provisional month is shown apart, on its own line. Main series data end on
   2 November 2026, the last day Suomi NPP delivers near-real-time data.
 - **One figure**: on years left out of the calibration, the error of the MODIS → VIIRS rescaling is
-  4.49% with one constant factor and 2.48% when MODIS is matched with Aqua only (held-out test, see
-  Key results; the published series still uses each year's own factor).
+  4.49% with one constant factor and 2.48% when MODIS is matched with Aqua only (held-out test; the
+  published series still uses each year's own factor). 4.49%, 3.25% and 3.12% are reproduced from
+  `aggregats.json`; 2.48% needs the raw files in `data/` (not versioned).
 - **Try it**: https://kahadjie.github.io/cameroon-fire-calendar/
 
 ![The application: summary sentence, the problem, and the month × year calendar](docs/screenshot.png)
@@ -216,12 +217,10 @@ Done:
 - [x] Audit against the judging criteria — [docs/AUDIT.md](docs/AUDIT.md)
 - [x] Demo scripts and slide plan — [docs/DEMO_PLAN.md](docs/DEMO_PLAN.md)
 - [x] Submission text — [submission/DESCRIPTION.md](submission/DESCRIPTION.md)
+- [x] Submitted to NASA Space Apps on 14 November 2026 (7-slide presentation as demonstration; video
+      optional)
 
 Remaining:
-- [ ] Project demonstration from [docs/DEMO_PLAN.md](docs/DEMO_PLAN.md): the 7-slide presentation (a
-      30-second video is optional)
-- [ ] Submit the NASA Space Apps form ([submission/FORM.md](submission/FORM.md)) before 15 November
-      2026, 23:59 (Cameroon)
 - [ ] Check with NASA FIRMS whether MODIS has data from 30 August to 8 September 2026
 
 ## Roadmap
