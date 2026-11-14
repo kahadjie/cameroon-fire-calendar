@@ -4,7 +4,7 @@ NASA Space Apps Challenge 2026, challenge "Harmonizing MODIS and VIIRS fire hots
 
 **Live app: https://kahadjie.github.io/cameroon-fire-calendar/**
 
-**Team WESH MIS** (WorldWide Emergent Smart Hub), Cameroon: Kenmoe Kahadjie Felix (sole member).
+**Team WESH**, Cameroon: Kenmoe Kahadjie Felix (sole member).
 
 ## In 30 seconds
 

@@ -1,6 +1,6 @@
 # Demo plan
 
-App: https://kahadjie.github.io/cameroon-fire-calendar/ · Team WESH MIS (WorldWide Emergent Smart Hub):
+App: https://kahadjie.github.io/cameroon-fire-calendar/ · Team WESH:
 Kenmoe Kahadjie Felix. The figures below are those the page computes from the published data; check
 them on the page on the day of recording (the summary sentence is generated, not written by hand).
 
@@ -36,7 +36,7 @@ them on the page on the day of recording (the summary sentence is generated, not
 
 ## 7 slides
 
-1. **Title**: Cameroon Fire Calendar — MODIS and VIIRS harmonized. Team WESH MIS, Kenmoe Kahadjie Felix,
+1. **Title**: Cameroon Fire Calendar — MODIS and VIIRS harmonized. Team WESH, Kenmoe Kahadjie Felix,
    NASA Space Apps Challenge 2026, challenge "Harmonizing MODIS and VIIRS fire hotspots". Visual:
    `docs/screenshot.png`.
 2. **The problem**: two NASA sensors, about four times more VIIRS detections, the same fire seen by

@@ -1,7 +1,7 @@
 # Submission description (about 200 words)
 
 **Cameroon Fire Calendar: MODIS and VIIRS harmonized**
-Team WESH MIS (WorldWide Emergent Smart Hub): Kenmoe Kahadjie Felix.
+Team WESH: Kenmoe Kahadjie Felix.
 App: https://kahadjie.github.io/cameroon-fire-calendar/ · Code: https://github.com/kahadjie/cameroon-fire-calendar
 
 **The problem.** NASA has watched fires from space with MODIS since 2000 and with the sharper VIIRS
