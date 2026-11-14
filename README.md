@@ -6,6 +6,12 @@ NASA Space Apps Challenge 2026, challenge "Harmonizing MODIS and VIIRS fire hots
 
 **Team WESH**, Cameroon: Kenmoe Kahadjie Felix (sole member).
 
+> **Branch `jury-v2`** (not the submitted version, which is on `main`): `index.html` answers one
+> question — was the last fire season unusual? — with fire radiative power, pixel geometry, overpass
+> time, robust z-scores and bootstrap intervals (`analysis.py`, `stats.py`, `jury.json`). The submitted
+> calendar is kept as `calendar.html`. One-page summary: [docs/JURY_V2.md](docs/JURY_V2.md); demo:
+> [docs/DEMO_V2.md](docs/DEMO_V2.md). Rebuild: `python analysis.py` (needs `data/`); tests: `python -m pytest`.
+
 ## In 30 seconds
 
 - **Problem**: NASA's two fire sensors, MODIS and VIIRS, count fires differently (VIIRS records about

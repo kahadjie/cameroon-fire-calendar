@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cameroon Fire Calendar</title>
+<meta name="description" content="Is this month unusually active? Fire detections in Cameroon since 2012, NASA MODIS and VIIRS put on one scale (NASA FIRMS).">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+:root{--bg:#fbfaf7;--fg:#1d1d1b;--muted:#5d5a55;--line:#d9d5cc;--card:#fff;--warn:#fff3cd;--warn-fg:#5c4400;--missing:#ecebe7;--focus:#0b5cad;--accent:#0b5cad;--accent-fg:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#151513;--fg:#ecebe6;--muted:#aaa69d;--line:#3a3833;--card:#1e1d1a;--warn:#3a3214;--warn-fg:#f2dc9b;--missing:#2a2925;--focus:#7ab8ff;--accent:#7ab8ff;--accent-fg:#111}}
+:root[data-theme="dark"]{--bg:#151513;--fg:#ecebe6;--muted:#aaa69d;--line:#3a3833;--card:#1e1d1a;--warn:#3a3214;--warn-fg:#f2dc9b;--missing:#2a2925;--focus:#7ab8ff;--accent:#7ab8ff;--accent-fg:#111}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:1180px;margin:0 auto;padding:16px}
+h1{font-size:1.5rem;margin:.2rem 0 .3rem}
+h2{font-size:1.05rem;margin:0 0 .5rem}
+p{margin:.3rem 0}
+a{color:var(--focus)}
+.muted{color:var(--muted)}.small{font-size:.84rem}
+.skip{position:absolute;left:-999px}.skip:focus{left:8px;top:8px;background:var(--card);padding:6px 10px;z-index:1000}
+.hero{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.lead{font-size:1rem}
+.summary{font-size:1.15rem;font-weight:600;margin:.6rem 0 .2rem}
+.validity{font-size:.88rem;color:var(--muted)}
+.provline{font-size:.92rem;margin:.2rem 0;padding-left:8px;border-left:4px solid var(--warn-fg)}
+.primary{background:var(--accent);color:var(--accent-fg);border-color:var(--accent);font-weight:600;margin-top:10px}
+.banner{background:var(--warn);color:var(--warn-fg);border-radius:8px;padding:8px 12px;margin:10px 0;font-size:.9rem}
+.banner strong{font-weight:600}
+.problem{margin:12px 0}
+.controls{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin:12px 0}
+.controls label{font-size:.9rem}
+select,button{font:inherit;color:var(--fg);background:var(--card);border:1px solid var(--line);border-radius:6px;padding:6px 10px;min-height:44px}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:4px}
+.chip{min-width:44px;min-height:40px;padding:4px 6px;font-size:.82rem}
+.chip[aria-pressed="false"]{opacity:.45;text-decoration:line-through}
+.grid2{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:16px;margin-top:14px}
+@media (max-width:860px){.grid2{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;min-width:0}
+.calwrap,.scroll{overflow-x:auto;max-width:100%}
+table.cal{border-collapse:separate;border-spacing:2px;width:100%;table-layout:fixed;font-variant-numeric:tabular-nums}
+.cal th{font-weight:600;font-size:.72rem;color:var(--muted);padding:2px 0}
+.cal th.y{width:3.1em;text-align:right;padding-right:4px}
+.cal td{height:30px;text-align:center;font-size:.7rem;border-radius:3px;cursor:pointer;position:relative;padding:0;overflow:hidden;white-space:nowrap}
+.cal td.na{background:var(--missing);color:var(--muted);cursor:default}
+.cal td.prov::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.55) 0 2px,transparent 2px 6px);pointer-events:none}
+.cal td.sel{box-shadow:0 0 0 3px var(--fg) inset}
+.cal td.off{opacity:.25}
+#map{height:430px;border-radius:8px}
+.legend{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;font-size:.75rem;margin-top:8px}
+.legend span.sw{display:inline-block;width:28px;height:14px;border-radius:2px;vertical-align:middle}
+.legend .item{display:inline-flex;gap:3px;align-items:center}
+.sw.hatch{background:repeating-linear-gradient(135deg,#bbb 0 2px,#fff 2px 6px);border:1px solid var(--line)}
+table.small{border-collapse:collapse;font-size:.82rem;width:100%;font-variant-numeric:tabular-nums}
+table.small td,table.small th{border-bottom:1px solid var(--line);padding:3px 6px;text-align:right}
+table.small th:first-child,table.small td:first-child{text-align:left}
+.cmp td{padding:2px 4px;font-size:.8rem}
+.cmp .bar{display:block;height:9px;border-radius:2px;margin:1px 0}
+.cmp .a{background:#253c6e}.cmp .b{background:#e5cd5b;border:1px solid #958c77}
+.term{border-bottom:1px dotted currentColor;cursor:help;position:relative}
+.term:hover::after,.term:focus::after{content:attr(data-tip);position:absolute;left:0;top:1.6em;z-index:900;width:min(260px,80vw);background:var(--fg);color:var(--bg);font-size:.8rem;font-weight:400;line-height:1.35;padding:6px 8px;border-radius:6px;white-space:normal}
+dl.glossary dt{font-weight:600;margin-top:.4rem}dl.glossary dd{margin:0 0 0 1rem;font-size:.86rem}
+footer{margin:20px 0 8px;font-size:.82rem;color:var(--muted)}
+.detail{font-size:.88rem;margin-top:8px;min-height:2.6em}
+@media (max-width:520px){main{padding:10px}#map{height:320px}.card{padding:8px}table.cal{border-spacing:1px}.cal td{font-size:.6rem;height:26px}.cal th{font-size:.62rem}.cal th.y{width:2.6em;padding-right:2px}h1{font-size:1.3rem}.summary{font-size:1.05rem}}
+</style>
+</head>
+<body>
+<a class="skip" href="#calTitle">Skip to the calendar</a>
+<main>
+  <header class="hero">
+    <h1>Cameroon fire calendar</h1>
+    <p class="lead">NASA's two fire sensors, <span class="term" tabindex="0" data-tip="MODIS: NASA instrument on the Terra and Aqua satellites, watching fires since 2000 with 1 km pixels.">MODIS</span> and <span class="term" tabindex="0" data-tip="VIIRS: newer NASA/NOAA instrument (Suomi NPP since 2012, then NOAA-20 and NOAA-21) with 375 m pixels; it sees many more small fires.">VIIRS</span>, count fires differently; this calendar puts them on one scale so you can see, month by month since 2012, whether Cameroon had more or fewer fires than usual.</p>
+    <p class="summary" id="summary" aria-live="polite">Loading…</p>
+    <p class="provline" id="provLine" hidden></p>
+    <p class="validity" id="validity">Check on years left out of the calibration: average error 2.48% when MODIS is matched with Aqua only (same time of day), against 4.49% with one constant factor (measured on the development branch; the published series still uses each year's own factor).</p>
+    <button class="primary" id="mostActive" type="button">Show the most active month</button>
+  </header>
+
+  <section class="problem card" aria-labelledby="problemTitle">
+    <h2 id="problemTitle">The problem</h2>
+    <p>MODIS and VIIRS do not see fires the same way: VIIRS has smaller pixels and records about four times more fire detections, so their counts cannot be compared directly. Anyone who wants to know whether a month is unusually active has no single, consistent series to read. This calendar uses one sensor as the reference (Suomi NPP, VIIRS) and rescales MODIS year by year, so every month of Cameroon since 2012 is on the same scale.</p>
+  </section>
+
+  <div class="banner" role="note"><strong>Provisional months</strong> (hatched: <span id="provList"></span>) use near real-time data or are among the last five months; they may still change. The main series (Suomi NPP) stops on <span id="snppEnd"></span>; 2026 is incomplete.</div>
+  <div class="banner" role="note"><strong>MODIS, August and September 2026:</strong> the downloaded files contain no MODIS detection from <span id="modisNone"></span>, so these two months have no MODIS value. Whether data are missing or there was simply no fire is not yet checked. The main series is not affected.</div>
+
+  <div class="controls">
+    <label>Show
+      <select id="view">
+        <option value="anomaly">Compared with usual (%)</option>
+        <option value="snpp">Number of fire detections</option>
+        <option value="modis_equiv">Older sensor (MODIS), rescaled</option>
+      </select>
+    </label>
+    <label>Map year <select id="year"></select></label>
+    <button id="export" type="button">Download these values (CSV)</button>
+    <button id="allMonths" type="button">All months</button>
+  </div>
+  <div class="chips" id="months" role="group" aria-label="Months shown"></div>
+
+  <div class="grid2">
+    <section class="card" aria-labelledby="calTitle">
+      <h2 id="calTitle" tabindex="-1">Every month since 2012</h2>
+      <p class="muted small" id="calHint" data-anomaly="1">Each cell compares the month with its <span class="term" tabindex="0" data-tip="Usual level: the median, i.e. the middle value of that calendar month over 2012-2025 (half of the years were above, half below).">usual level</span>: <span class="term" tabindex="0" data-tip="Anomaly: (detections this month − usual level) / usual level × 100. +50 means 50% more fire detections than usual.">+50</span> means 50% more fire detections than usual.</p>
+      <div class="calwrap"><table class="cal" id="cal"></table></div>
+      <div class="legend" id="legend"></div>
+      <p class="detail" id="detail" aria-live="polite">Select a cell (click, or Tab then Enter; arrow keys move between cells) to see its details and its map.</p>
+    </section>
+    <section class="card" aria-labelledby="mapTitle">
+      <h2 id="mapTitle">Map</h2>
+      <div id="map" role="img" aria-label="Map of fire detections per 0.5 degree cell"></div>
+      <div class="legend" id="mapLegend"></div>
+    </section>
+  </div>
+
+  <section class="card" aria-labelledby="cmpTitle" style="margin-top:16px">
+    <h2 id="cmpTitle">Compare two years</h2>
+    <div class="controls" style="margin:4px 0 8px">
+      <label>First <select id="cmpA"></select></label>
+      <label>Second <select id="cmpB"></select></label>
+    </div>
+    <div class="scroll"><table class="cmp" id="cmp"></table></div>
+    <p class="muted small">Fire detections per month (Suomi NPP). Empty: month not complete. *: provisional.</p>
+  </section>
+
+  <div class="grid2">
+    <section class="card"><h2>Rescaling MODIS, year by year</h2>
+      <p class="muted small">How many Suomi NPP detections correspond to one MODIS detection, computed each year over the months both sensors fully cover (<span class="term" tabindex="0" data-tip="Confidence: FIRMS rates each detection low, nominal or high; only nominal and high are kept.">nominal and high confidence</span>). It changes over time, so it is never a single constant.</p>
+      <table class="small" id="calib"></table></section>
+    <section class="card"><h2>Cross-check with NOAA-20 and NOAA-21</h2>
+      <p class="muted small">These two VIIRS satellites often see the same fires as Suomi NPP, so they are not added together; they only check that the main series moves the same way.</p>
+      <table class="small" id="verif"></table></section>
+  </div>
+
+  <section class="card" style="margin-top:16px" aria-labelledby="glossTitle">
+    <h2 id="glossTitle">Words used</h2>
+    <dl class="glossary">
+      <dt>Fire detection (hotspot)</dt><dd>A satellite pixel that was hotter than its surroundings when the satellite passed. One large fire can give several detections; a small fire under clouds gives none. Detections are not burned area.</dd>
+      <dt>Usual level (median)</dt><dd>The middle value of that calendar month over 2012-2025.</dd>
+      <dt>Compared with usual (anomaly)</dt><dd>(detections this month − usual level) / usual level × 100.</dd>
+      <dt>MODIS, VIIRS, Suomi NPP</dt><dd>NASA fire sensors. MODIS (Terra, Aqua) since 2000, 1 km pixels; VIIRS since 2012, 375 m pixels, on Suomi NPP (the main series here), NOAA-20 and NOAA-21.</dd>
+      <dt>Provisional</dt><dd>Near real-time data, or one of the last five months: may change when NASA publishes the final data.</dd>
+      <dt>FRP (fire radiative power)</dt><dd>The heat a fire gives off, in megawatts. Not shown on this page; compared between sensors on the development branch.</dd>
+    </dl>
+  </section>
+
+  <footer>
+    Data: NASA FIRMS (Fire Information for Resource Management System), MODIS Collection 6.1 and VIIRS 375 m (Suomi NPP, NOAA-20, NOAA-21), <a href="https://firms.modaps.eosdis.nasa.gov" rel="noopener">firms.modaps.eosdis.nasa.gov</a>. "We acknowledge the use of data and imagery from LANCE FIRMS operated by NASA's Earth Science Data and Information System (ESDIS) with funding provided by NASA Headquarters." Base map © OpenStreetMap contributors. <span id="generated"></span><br>
+    Team <strong>WESH</strong>: Kenmoe Kahadjie Felix. NASA Space Apps Challenge 2026. <a href="https://github.com/kahadjie/cameroon-fire-calendar" rel="noopener">Source code and method</a> · <a href="https://github.com/kahadjie/cameroon-fire-calendar/issues/new" rel="noopener">Report a problem</a>.
+  </footer>
+</main>
+
+<script src="donnees.js"></script>
+<script src="summary.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+"use strict";
+const AGG = window.FIRMS_AGG, GRID = window.FIRMS_GRID;
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const LONG = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const SHORT = ["J","F","M","A","M","J","J","A","S","O","N","D"];
+// "cividis" palette: readable with color vision deficiency and in grayscale (luminance increases, see README).
+const PALETTE = ["#00224e","#253c6e","#4c556c","#6f6f73","#958c77","#bdab6e","#e5cd5b","#fee838"];
+const ANOM_BINS = [-60,-30,-10,10,30,60,100]; // 8 classes
+const VIEW_FILE = {anomaly:"vs_usual_pct", snpp:"detections", modis_equiv:"modis_rescaled"};
+const $ = id => document.getElementById(id);
+const byKey = new Map(AGG.months.map(r => [r.year + "-" + r.month, r]));
+const years = [...new Set(AGG.months.map(r => r.year))];
+const state = { view: "anomaly", year: years[years.length - 2], months: new Set([1,2,3,4,5,6,7,8,9,10,11,12]), sel: null };
+const fmtDate = d => new Date(d+"T00:00:00Z").toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric",timeZone:"UTC"});
+
+function lum(hex){const c=[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)/255).map(v=>v<=.03928?v/12.92:((v+.055)/1.055)**2.4);return .2126*c[0]+.7152*c[1]+.0722*c[2];}
+function binIndex(v, bins){let i=0;while(i<bins.length&&v>=bins[i])i++;return i;}
+function quantileBins(values,n){const s=values.filter(v=>v!=null).sort((a,b)=>a-b);if(!s.length)return[];const out=[];for(let i=1;i<n;i++)out.push(s[Math.floor(i*s.length/n)]);return out;}
+function value(r){if(!r)return null;return state.view==="anomaly"?r.anomaly_pct:r[state.view];}
+function fmt(v){if(v==null)return"—";if(state.view==="anomaly")return(v>0?"+":"")+Math.round(v);return v>=10000?Math.round(v/1000)+"k":v>=1000?(v/1000).toFixed(1)+"k":String(v);}
+const pct = v => `${Math.abs(Math.round(v))}% ${v>=0?"above":"below"}`;
+let countBins = [];
+
+// Conclusion generated from the data only (summary.js, tested by tests/summary_test.html).
+function renderSummary(){
+  const snppEnd = AGG.meta.coverage.snpp[1];
+  const s = FireSummary.summaryParts(AGG.months, snppEnd);
+  $("summary").textContent = `${s.lead} ${s.end}`;
+  if (s.provisional) { $("provLine").textContent = s.provisional; $("provLine").hidden = false; }
+  $("snppEnd").textContent = fmtDate(snppEnd);
+}
+
+function renderCalendar(){
+  if(state.view!=="anomaly")countBins=quantileBins(AGG.months.map(r=>r[state.view]),PALETTE.length);
+  const t=$("cal");let h="<thead><tr><th class='y' scope='col'><span class='muted'>year</span></th>";
+  MONTHS.forEach((m,i)=>h+=`<th scope='col' title='${LONG[i]}'>${window.innerWidth<520?SHORT[i]:m}</th>`);h+="</tr></thead><tbody>";
+  for(const y of years){h+=`<tr><th class='y' scope='row'>${y}</th>`;
+    for(let m=1;m<=12;m++){const r=byKey.get(y+"-"+m),v=value(r);
+      const label=`${LONG[m-1]} ${y}`;
+      if(v==null){h+=`<td class='na' title='${label}: month not complete in the data'>·</td>`;continue;}
+      const col=PALETTE[state.view==="anomaly"?binIndex(v,ANOM_BINS):binIndex(v,countBins)];
+      const cls=[r.provisional?"prov":"",state.months.has(m)?"":"off",state.sel&&state.sel.y===y&&state.sel.m===m?"sel":""].join(" ");
+      h+=`<td tabindex='0' data-y='${y}' data-m='${m}' class='${cls}' style='background:${col};color:${lum(col)>.25?"#111":"#fff"}' title='${label}${r.provisional?" (provisional)":""}' aria-label='${label}: ${fmt(v)}${state.view==="anomaly"?" percent compared with usual":""}${r.provisional?", provisional":""}'>${fmt(v)}</td>`;}
+    h+="</tr>";}
+  t.innerHTML=h+"</tbody>";
+  const hint=$("calHint"); if(!hint.dataset.text) hint.dataset.text=hint.innerHTML;
+  hint.innerHTML = state.view==="anomaly" ? hint.dataset.text
+    : state.view==="snpp" ? "Each cell is the number of fire detections that month (Suomi NPP); k = thousand."
+    : "Each cell is the older MODIS count, rescaled to Suomi NPP with that year's factor; k = thousand.";
+  renderLegend();
+}
+function renderLegend(){
+  const labels=state.view==="anomaly"?["60% or more below","30-60% below","10-30% below","close to usual (±10%)","10-30% above","30-60% above","60-100% above","twice usual or more"]
+    :PALETTE.map((_,i)=>i===0?`< ${countBins[0]}`:i===PALETTE.length-1?`≥ ${countBins[i-1]}`:`${countBins[i-1]}–${countBins[i]}`);
+  $("legend").innerHTML=PALETTE.map((c,i)=>`<span class='item'><span class='sw' style='background:${c}'></span>${labels[i]}</span>`).join("")+
+    "<span class='item'><span class='sw' style='background:var(--missing)'></span>month not complete</span><span class='item'><span class='sw hatch'></span>provisional: may still change</span>";
+}
+function showDetail(y,m){
+  const r=byKey.get(y+"-"+m);if(!r)return;
+  const p=[`<strong>${LONG[m-1]} ${y}</strong>${r.provisional?" (provisional)":""}`];
+  p.push(`${r.snpp??"incomplete"} fire detections (Suomi NPP); usual for ${LONG[m-1]}: ${r.median??"—"}; ${r.anomaly_pct==null?"—":pct(r.anomaly_pct)+" usual"}.`);
+  p.push(`Older sensor MODIS: ${r.modis??"no value"}${r.modis_equiv!=null?` (rescaled: ${r.modis_equiv}, factor ${r.ratio}${r.ratio_year&&r.ratio_year!==y?" from "+r.ratio_year:""})`:""}.`);
+  if(r.n20!=null||r.n21!=null)p.push(`Cross-check: NOAA-20 ${r.n20??"—"}, NOAA-21 ${r.n21??"—"}.`);
+  if(r.median!=null&&r.median<500)p.push("Low-fire season (usual level below 500): a few detections change the percentage a lot.");
+  if(r.ratio_year===y&&AGG.calibration.find(c=>c.year===y&&c.months_used<12))p.push(`The ${y} factor comes from an incomplete year.`);
+  $("detail").innerHTML=p.join(" ");
+}
+$("cal").addEventListener("click",e=>{const td=e.target.closest("td[data-y]");if(!td)return;pick(+td.dataset.y,+td.dataset.m);});
+$("cal").addEventListener("keydown",e=>{
+  const td=e.target.closest("td[data-y]");if(!td)return;
+  if(e.key==="Enter"||e.key===" "){e.preventDefault();pick(+td.dataset.y,+td.dataset.m);return;}
+  const moves={ArrowLeft:[0,-1],ArrowRight:[0,1],ArrowUp:[-1,0],ArrowDown:[1,0]};if(!moves[e.key])return;e.preventDefault();
+  const [dy,dm]=moves[e.key];let y=+td.dataset.y,m=+td.dataset.m; // skips incomplete months, stops at the edge
+  while(true){y+=dy;m+=dm;if(m<1||m>12||!years.includes(y))return;const n=document.querySelector(`td[data-y='${y}'][data-m='${m}']`);if(n){n.focus();return;}}
+});
+function pick(y,m){state.sel={y,m};state.year=y;$("year").value=y;renderCalendar();showDetail(y,m);renderMap();
+  const td=document.querySelector(`td[data-y='${y}'][data-m='${m}']`);if(td)td.focus();}
+
+// Map: Suomi NPP detections summed per 0.5° cell over the chosen year and months (or the single month selected).
+let map=null,layer=null;
+if(window.L){
+  map=L.map("map",{scrollWheelZoom:false}).setView([7.37,12.35],window.innerWidth<520?5:6);
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:11,attribution:"© OpenStreetMap"}).addTo(map);
+  layer=L.layerGroup().addTo(map);
+} else { $("map").textContent="Map unavailable (it needs an internet connection). The calendar and the CSV download still work."; }
+function renderMap(){
+  if(!map)return;layer.clearLayers();
+  const months=state.sel&&state.sel.y===state.year?[state.sel.m]:[...state.months];
+  const sum=new Map();
+  for(const m of months)for(const [la,lo,n] of (GRID.cells[`${state.year}-${String(m).padStart(2,"0")}`]||[])){const k=la+","+lo;sum.set(k,(sum.get(k)||0)+n);}
+  const vals=[...sum.values()];
+  const bins=[...new Set(quantileBins(vals,PALETTE.length))];while(bins.length<PALETTE.length-1)bins.push((bins[bins.length-1]||0)+1);
+  for(const [k,n] of sum){const [la,lo]=k.split(",").map(Number);const c=PALETTE[binIndex(n,bins)];
+    L.rectangle([[la,lo],[la+GRID.grid_deg,lo+GRID.grid_deg]],{color:c,weight:0,fillColor:c,fillOpacity:.72}).bindTooltip(`${n} detections`).addTo(layer);}
+  const what=months.length===1?`${LONG[months[0]-1]} ${state.year}`:`${state.year}, ${months.length} months`;
+  $("mapTitle").textContent=`Map: ${what} (${vals.reduce((a,b)=>a+b,0).toLocaleString("en-US")} fire detections)`;
+  const labels=PALETTE.map((_,i)=>i===0?`< ${bins[0]}`:i===PALETTE.length-1?`≥ ${bins[i-1]}`:`${bins[i-1]}–${bins[i]-1}`);
+  $("mapLegend").innerHTML=labels.map((l,i)=>`<span class='item'><span class='sw' style='background:${PALETTE[i]}'></span>${l}</span>`).join("")+"<span class='item'>fire detections per square of about 55 km</span>";
+}
+
+function renderCompare(){
+  const a=+$("cmpA").value,b=+$("cmpB").value;
+  const rows=MONTHS.map((_,i)=>[byKey.get(a+"-"+(i+1)),byKey.get(b+"-"+(i+1))]);
+  const max=Math.max(1,...rows.flat().map(r=>r&&r.snpp||0));
+  const cell=(r,cls)=>r&&r.snpp!=null?`<span class='bar ${cls}' style='width:${Math.max(1,Math.round(r.snpp/max*160))}px'></span>${r.snpp.toLocaleString("en-US")}${r.provisional?" *":""}`:"—";
+  $("cmp").innerHTML=`<tr><th scope='col'>Month</th><th scope='col'>${a}</th><th scope='col'>${b}</th></tr>`+rows.map(([ra,rb],i)=>`<tr><th scope='row'>${MONTHS[i]}</th><td>${cell(ra,"a")}</td><td>${cell(rb,"b")}</td></tr>`).join("");
+}
+
+function renderTables(){
+  $("calib").innerHTML="<tr><th>Year</th><th>Factor</th><th>Months</th></tr>"+AGG.calibration.map(c=>`<tr><td>${c.year}</td><td>${c.ratio.toFixed(3)}</td><td>${c.months_used}</td></tr>`).join("");
+  const v=AGG.verification;
+  $("verif").innerHTML="<tr><th>Satellite</th><th>Months</th><th>Correlation</th><th>Ratio to Suomi NPP</th></tr>"+
+    Object.entries(v).map(([k,o])=>`<tr><td>${k==="n20"?"NOAA-20":"NOAA-21"}</td><td>${o.months}</td><td>${o.corr_with_snpp.toFixed(3)}</td><td>${o.ratio_to_snpp.toFixed(3)}</td></tr>`).join("");
+}
+
+function exportCsv(){
+  const head=["year","month","value_shown","view","snpp","modis","modis_as_snpp","factor","factor_year","snpp_median","anomaly_pct","n20","n21","provisional","modis_complete"];
+  const rows=AGG.months.filter(r=>state.months.has(r.month)).map(r=>[r.year,r.month,value(r)??"",state.view,r.snpp??"",r.modis??"",r.modis_equiv??"",r.ratio??"",r.ratio_year??"",r.median??"",r.anomaly_pct??"",r.n20??"",r.n21??"",r.provisional?1:0,r.complete.modis?1:0]);
+  const csv=`# Source: NASA FIRMS (https://firms.modaps.eosdis.nasa.gov); main series Suomi NPP (snpp), data to ${AGG.meta.coverage.snpp[1]}; provisional months flagged; columns explained in the README\n`+[head,...rows].map(r=>r.join(",")).join("\n")+"\n";
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv;charset=utf-8"}));
+  a.download=`cameroon_fire_calendar_${VIEW_FILE[state.view]}_2012_to_${AGG.meta.coverage.snpp[1]}.csv`;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},0);
+}
+
+function init(){
+  years.forEach(y=>$("year").insertAdjacentHTML("beforeend",`<option value='${y}'>${y}${y===years[years.length-1]?" (incomplete)":""}</option>`));
+  $("year").value=state.year;
+  for(const id of ["cmpA","cmpB"])years.forEach(y=>$(id).insertAdjacentHTML("beforeend",`<option value='${y}'>${y}${y===years[years.length-1]?" (incomplete)":""}</option>`));
+  $("cmpA").value=years[years.length-2];$("cmpB").value=years[years.length-1];
+  $("cmpA").onchange=$("cmpB").onchange=renderCompare;
+  $("months").innerHTML=MONTHS.map((m,i)=>`<button type='button' class='chip' aria-pressed='true' data-m='${i+1}'>${m}</button>`).join("");
+  $("months").addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;const m=+b.dataset.m;
+    if(state.months.has(m)){if(state.months.size>1)state.months.delete(m);}else state.months.add(m);
+    b.setAttribute("aria-pressed",state.months.has(m));state.sel=null;renderCalendar();renderMap();});
+  $("allMonths").onclick=()=>{state.months=new Set([1,2,3,4,5,6,7,8,9,10,11,12]);document.querySelectorAll(".chip").forEach(b=>b.setAttribute("aria-pressed","true"));state.sel=null;renderCalendar();renderMap();};
+  $("view").onchange=e=>{state.view=e.target.value;renderCalendar();};
+  $("year").onchange=e=>{state.year=+e.target.value;state.sel=null;renderCalendar();renderMap();};
+  $("export").onclick=exportCsv;
+  $("mostActive").onclick=()=>{const top=AGG.months.filter(r=>r.snpp!=null).reduce((a,b)=>b.snpp>a.snpp?b:a);
+    if(state.view!=="snpp"){state.view="snpp";$("view").value="snpp";}
+    pick(top.year,top.month);$("calTitle").scrollIntoView({block:"start"});};
+  const none=AGG.meta.modis_gap.map(fmtDate);
+  $("modisNone").textContent=`${none[0]} to ${none[1]}`;
+  $("provList").textContent=AGG.months.filter(r=>r.provisional).map(r=>MONTHS[r.month-1]+" "+r.year).join(", ");
+  $("generated").textContent=`Aggregates generated ${AGG.meta.generated}.`;
+  renderSummary();renderTables();renderCalendar();renderMap();renderCompare();
+  let w=window.innerWidth;window.addEventListener("resize",()=>{if((w<520)!==(window.innerWidth<520)){w=window.innerWidth;renderCalendar();}});
+}
+init();
+</script>
+</body>
+</html>

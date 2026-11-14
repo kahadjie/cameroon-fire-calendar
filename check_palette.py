@@ -5,9 +5,12 @@ import re
 import sys
 from pathlib import Path
 
-html = Path(__file__).with_name("index.html").read_text(encoding="utf-8")
-palette = re.search(r"const PALETTE = \[(.*?)\];", html).group(1)
-colors = re.findall(r"#[0-9a-fA-F]{6}", palette)
+root = Path(__file__).resolve().parent
+pages = {p.name: p.read_text(encoding="utf-8") for p in (root / "index.html", root / "calendar.html") if p.exists()}
+with_palette = {n: re.search(r"const PALETTE = \[(.*?)\];", t) for n, t in pages.items()}
+name, match = next((n, m) for n, m in with_palette.items() if m)
+colors = re.findall(r"#[0-9a-fA-F]{6}", match.group(1))
+print("Calendar palette from", name)
 
 
 def luminance(hex_color: str) -> float:
@@ -34,4 +37,12 @@ for i, c in enumerate(colors):
         ok = False
     previous = g
 print("Palette increases in grayscale, step >= 12 between classes:", "YES" if ok else "NO")
+
+# Season page (jury-v2): ordinary bar vs highlighted latest season must differ in gray, not only in color.
+season = re.search(r"--bar:(#[0-9a-fA-F]{6});--hi:(#[0-9a-fA-F]{6})", pages.get("index.html", ""))
+if season:
+    bar, hi = season.groups()
+    step = abs(gray(hi) - gray(bar))
+    print(f"Season page: bar {bar} gray {gray(bar)}, highlight {hi} gray {gray(hi)}, step {step}:", "YES" if step >= 60 else "NO")
+    ok = ok and step >= 60
 sys.exit(0 if ok else 1)
