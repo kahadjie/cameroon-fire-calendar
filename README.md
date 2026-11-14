@@ -17,8 +17,8 @@ NASA Space Apps Challenge 2026, challenge "Harmonizing MODIS and VIIRS fire hots
   provisional month is shown apart, on its own line. Main series data end on
   2 November 2026, the last day Suomi NPP delivers near-real-time data.
 - **One figure**: on years left out of the calibration, the error of the MODIS → VIIRS rescaling is
-  4.49% with one constant factor and 2.48% when MODIS is matched with Aqua only (measured; the
-  published series still uses each year's own factor).
+  4.49% with one constant factor and 2.48% when MODIS is matched with Aqua only (`python validate.py`
+  reproduces it; the published series still uses each year's own factor).
 - **Try it**: https://kahadjie.github.io/cameroon-fire-calendar/
 
 ![The application: summary sentence, the problem, and the month × year calendar](docs/screenshot.png)
@@ -74,8 +74,8 @@ Base map: © OpenStreetMap contributors (ODbL). No other data source is used.
    factor = S-NPP detections / MODIS detections, over months that are complete for both sensors and
    not provisional. A year without overlap would take the nearest year's factor (and say so).
    Factors range from 4.008 (2012) to 4.693 (2025); 5.942 for 2026, from six months. Validation: 4.49%
-   average error with one constant factor, 2.48% when MODIS is matched with Aqua only (measured on the
-   development branch; the published series uses each year's own factor).
+   average error with one constant factor, 2.48% when MODIS is matched with Aqua only (reproduced by
+   `validate.py`; the published series uses each year's own factor).
 5. **Incomplete months are left empty, not extrapolated.** A month has a value for a sensor only if it
    is covered from its first to its last day: January 2012 (data start on the 20th), November 2026 for
    S-NPP (NRT ends on 2 November), August and September 2026 for MODIS (no MODIS detection in the
@@ -95,7 +95,7 @@ Base map: © OpenStreetMap contributors (ODbL). No other data source is used.
   standard data up to 31 August and near-real-time data from 1 September, so this may simply be days
   without fire; it is not yet checked. Shown in the application. The main series is not affected.
 - **The main series ends on 2 November 2026**: Suomi NPP near-real-time data stop on that day (NASA
-  availability service); NOAA-20 and NOAA-21 continue to 14 November 2026 but are only used as a
+  availability service); NOAA-20 and NOAA-21 continue to 13 November 2026 but are only used as a
   cross-check. November 2026 is therefore incomplete.
 - **The 2026 factor is 5.942, from 6 months only** (January to June). It is well outside the 2012-2025
   range (3.951 to 4.693), so read it with caution (incomplete year; possibly the end of life of the
@@ -136,10 +136,11 @@ All figures below come from `aggregats.json`.
   March (+41.6%) above. July to November 2026 are provisional.
 - **Most active month on record** (Suomi NPP): February 2023, 90,395 detections (usual level for
   February 55,432).
-- **Held-out test of the rescaling** (each full year 2013-2025 left out in turn, measured on the
-  development branch `global`): 4.49% average error with one constant factor, 3.25% from the adjacent
-  years, 2.48% when MODIS is matched with Aqua only (same time of day). This is a comparison: the
-  published series uses each year's own all-MODIS factor.
+- **Held-out test of the rescaling** (each full year 2013-2025 left out in turn, `python validate.py`):
+  4.49% average error with one constant factor, 3.25% from the adjacent years, 3.12% from a linear
+  trend, 2.48% when MODIS is matched with Aqua only (same time of day; this variant needs the raw
+  files in `data/`, the others need `aggregats.json` only). This is a comparison: the published series
+  uses each year's own all-MODIS factor.
 
 ## CSV download
 
@@ -169,8 +170,10 @@ Requirements: Python 3.13 (pandas has no release for Python 3.15 yet) and pandas
 
 ```
 pip install pandas
+python validate.py            # held-out test of the rescaling, from aggregats.json (no raw data needed)
 python test_harmonize.py      # 10 tests on synthetic data
-python -m pytest              # the same 10 tests + the summary-sentence test (11)
+python test_validate.py       # 4 tests of the held-out test
+python -m pytest              # all of the above + the summary-sentence test (15)
 python inspect_archives.py    # checks the real files in data/ (dates, satellites, confidence, breaks)
 python harmonize.py           # writes aggregats.json, grille.json and donnees.js
 python check_palette.py       # grayscale palette check
@@ -190,13 +193,16 @@ into `data/modis`, `data/snpp`, `data/noaa20`, `data/noaa21`. No API key is used
 | `grille.json` | S-NPP detections per 0.5° cell and per month (map); no individual detections |
 | `harmonize.py` | loading, common confidence scale, filters, calibration, medians, anomalies |
 | `test_harmonize.py` | unit tests |
+| `validate.py` | held-out test of the rescaling (one year left out at a time); reads `aggregats.json` |
+| `test_validate.py` | tests of the held-out test on synthetic figures |
 | `inspect_archives.py` | inspection of the real files |
 | `check_palette.py` | grayscale palette check |
 | `summary.js` | the summary sentences at the top of the page, computed from the data |
 | `test_summary.py`, `tests/summary_test.html` | test of those sentences in a headless browser (skipped if none is installed) |
 | `docs/AUDIT.md` | audit against the five judging criteria |
 | `docs/DEMO_PLAN.md` | 30-second and 2-minute scripts, 7 slides |
-| `submission/DESCRIPTION.md` | submission text |
+| `submission/DESCRIPTION.md` | submission text (about 200 words) |
+| `submission/FORM.md` | one ready-to-paste answer per field of the Space Apps form |
 
 The repository contains only aggregates: no raw detection, no key, no personal data.
 
