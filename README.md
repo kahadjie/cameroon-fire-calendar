@@ -2,6 +2,12 @@
 
 NASA Space Apps Challenge 2026, challenge "Harmonizing MODIS and VIIRS fire hotspots".
 
+**Live app: https://kahadjie.github.io/cameroon-fire-calendar/**
+
+**Team WESH MIS** (WorldWide Emergent Smart Hub), Cameroon: Kenmoe Kahadjie Felix (sole member).
+
+![The application: month × year anomaly calendar, map and calibration table](docs/screenshot.png)
+
 A static web application (one page, `index.html`, Leaflet from a CDN, no server) that shows, for all of
 Cameroon, a month × year calendar of fire hotspots from 2012 to 2026. The main view is each month's
 **anomaly** against its **historical median** (2012 to 2025). A map shows detections per 0.5° cell for
@@ -135,7 +141,7 @@ The repository contains only aggregates: no raw detection, no key, no personal d
 ## Use of AI
 
 This project was built with the help of **Claude** (Anthropic), an AI assistant, working under the
-team's direction and review:
+direction and review of the team (Kenmoe Kahadjie Felix):
 
 - **Code**: Claude wrote `harmonize.py`, `test_harmonize.py`, `inspect_archives.py`,
   `check_palette.py` and `index.html` (layout, calendar, map, CSV export), from a written plan and the

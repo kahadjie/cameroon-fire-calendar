@@ -1,6 +1,8 @@
 # Submission description (about 200 words)
 
 **Cameroon Fire Calendar: MODIS and VIIRS harmonized**
+Team WESH MIS (WorldWide Emergent Smart Hub): Kenmoe Kahadjie Felix.
+App: https://kahadjie.github.io/cameroon-fire-calendar/ · Code: https://github.com/kahadjie/cameroon-fire-calendar
 
 Our app shows fire activity across Cameroon as a month × year calendar from 2012 to 2026, so anyone
 can see at a glance whether a month burned more or less than usual. Each cell is the month's anomaly

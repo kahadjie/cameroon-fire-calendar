@@ -1,11 +1,11 @@
 # Demo plan: 7 slides (English)
 
-Placeholders to fill: `[TEAM NAME]`, `[MEMBERS]`. Screenshots: take them from `index.html` in a
-browser (desktop and 390 px phone width).
+Screenshots: `docs/screenshot.png`, or take them from the live app in a browser (desktop and phone).
 
 ## Slide 1: Title
 - **Cameroon Fire Calendar: MODIS and VIIRS harmonized**
-- Team: [TEAM NAME]. Members: [MEMBERS].
+- Team: WESH MIS (WorldWide Emergent Smart Hub). Member: Kenmoe Kahadjie Felix.
+- Live app: https://kahadjie.github.io/cameroon-fire-calendar/
 - NASA Space Apps Challenge 2026, challenge "Harmonizing MODIS and VIIRS fire hotspots".
 - Visual: the calendar in anomaly view.
 
