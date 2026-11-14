@@ -1,0 +1,5 @@
+data/
+HANDOFF.md
+monthly_cameroon.csv
+__pycache__/
+*.pyc
