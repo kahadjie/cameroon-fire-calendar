@@ -62,7 +62,7 @@ Unit tests cover the confidence scale, the filters, the per-year factor and the 
 **Limitations.** Detections are not burned area. Low-season percentages are unstable (a few dozen
 detections give ±70% in September). July to November 2026 are provisional. The downloaded files
 contain no MODIS detection from 30 August to 8 September 2026; the cause is not verified, and the
-main series is not affected. The 2026 factor rests on six months.
+main series is not affected. 2026 has six complete months, so it uses the 2025 factor (4.693) rather than its own (5.942).
 
 **Why it matters.** Anyone can answer "is this fire season unusual?" from one consistent series
 instead of two incompatible ones, on a phone, in grayscale, and offline once the files are

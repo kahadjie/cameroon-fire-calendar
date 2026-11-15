@@ -39,77 +39,92 @@
   {
    "year": 2012,
    "ratio": 4.008,
-   "months_used": 11
+   "months_used": 11,
+   "used": true
   },
   {
    "year": 2013,
    "ratio": 4.218,
-   "months_used": 12
+   "months_used": 12,
+   "used": true
   },
   {
    "year": 2014,
    "ratio": 4.223,
-   "months_used": 12
+   "months_used": 12,
+   "used": true
   },
   {
    "year": 2015,
    "ratio": 3.951,
-   "months_used": 12
+   "months_used": 12,
+   "used": true
   },
   {
    "year": 2016,
    "ratio": 4.251,
-   "months_used": 12
+   "months_used": 12,
+   "used": true
   },
   {
    "year": 2017,
    "ratio": 4.337,
-   "months_used": 12
+   "months_used": 12,
+   "used": true
   },
   {
    "year": 2018,
    "ratio": 4.032,
-   "months_used": 12
+   "months_used": 12,
+   "used": true
   },
   {
    "year": 2019,
    "ratio": 4.284,
-   "months_used": 12
+   "months_used": 12,
+   "used": true
   },
   {
    "year": 2020,
    "ratio": 4.12,
-   "months_used": 12
+   "months_used": 12,
+   "used": true
   },
   {
    "year": 2021,
    "ratio": 4.446,
-   "months_used": 12
+   "months_used": 12,
+   "used": true
   },
   {
    "year": 2022,
    "ratio": 4.508,
-   "months_used": 12
+   "months_used": 12,
+   "used": true
   },
   {
    "year": 2023,
    "ratio": 4.506,
-   "months_used": 12
+   "months_used": 12,
+   "used": true
   },
   {
    "year": 2024,
    "ratio": 4.595,
-   "months_used": 12
+   "months_used": 12,
+   "used": true
   },
   {
    "year": 2025,
    "ratio": 4.693,
-   "months_used": 12
+   "months_used": 12,
+   "used": true
   },
   {
    "year": 2026,
    "ratio": 5.942,
-   "months_used": 6
+   "months_used": 6,
+   "used": false
   }
  ],
  "verification": {
@@ -3490,9 +3505,9 @@
    "month": 1,
    "snpp": 39083,
    "modis": 7092,
-   "modis_equiv": 42141,
-   "ratio": 5.942,
-   "ratio_year": 2026,
+   "modis_equiv": 33283,
+   "ratio": 4.693,
+   "ratio_year": 2025,
    "n20": 38858,
    "n21": 37721,
    "median": 52007.0,
@@ -3510,9 +3525,9 @@
    "month": 2,
    "snpp": 37563,
    "modis": 5782,
-   "modis_equiv": 34357,
-   "ratio": 5.942,
-   "ratio_year": 2026,
+   "modis_equiv": 27135,
+   "ratio": 4.693,
+   "ratio_year": 2025,
    "n20": 37470,
    "n21": 34826,
    "median": 55432.0,
@@ -3530,9 +3545,9 @@
    "month": 3,
    "snpp": 26892,
    "modis": 4639,
-   "modis_equiv": 27565,
-   "ratio": 5.942,
-   "ratio_year": 2026,
+   "modis_equiv": 21771,
+   "ratio": 4.693,
+   "ratio_year": 2025,
    "n20": 27174,
    "n21": 27582,
    "median": 18995.5,
@@ -3550,9 +3565,9 @@
    "month": 4,
    "snpp": 1544,
    "modis": 257,
-   "modis_equiv": 1527,
-   "ratio": 5.942,
-   "ratio_year": 2026,
+   "modis_equiv": 1206,
+   "ratio": 4.693,
+   "ratio_year": 2025,
    "n20": 1935,
    "n21": 1773,
    "median": 2363.0,
@@ -3570,9 +3585,9 @@
    "month": 5,
    "snpp": 1042,
    "modis": 132,
-   "modis_equiv": 784,
-   "ratio": 5.942,
-   "ratio_year": 2026,
+   "modis_equiv": 619,
+   "ratio": 4.693,
+   "ratio_year": 2025,
    "n20": 1093,
    "n21": 934,
    "median": 690.5,
@@ -3590,9 +3605,9 @@
    "month": 6,
    "snpp": 721,
    "modis": 78,
-   "modis_equiv": 463,
-   "ratio": 5.942,
-   "ratio_year": 2026,
+   "modis_equiv": 366,
+   "ratio": 4.693,
+   "ratio_year": 2025,
    "n20": 660,
    "n21": 696,
    "median": 437.5,
@@ -3610,9 +3625,9 @@
    "month": 7,
    "snpp": 245,
    "modis": 29,
-   "modis_equiv": 172,
-   "ratio": 5.942,
-   "ratio_year": 2026,
+   "modis_equiv": 136,
+   "ratio": 4.693,
+   "ratio_year": 2025,
    "n20": 236,
    "n21": 212,
    "median": 202.5,
@@ -3631,8 +3646,8 @@
    "snpp": 318,
    "modis": null,
    "modis_equiv": null,
-   "ratio": 5.942,
-   "ratio_year": 2026,
+   "ratio": 4.693,
+   "ratio_year": 2025,
    "n20": 258,
    "n21": 402,
    "median": 224.0,
@@ -3651,8 +3666,8 @@
    "snpp": 117,
    "modis": null,
    "modis_equiv": null,
-   "ratio": 5.942,
-   "ratio_year": 2026,
+   "ratio": 4.693,
+   "ratio_year": 2025,
    "n20": 128,
    "n21": 113,
    "median": 104.0,
@@ -3670,9 +3685,9 @@
    "month": 10,
    "snpp": 2096,
    "modis": 229,
-   "modis_equiv": 1361,
-   "ratio": 5.942,
-   "ratio_year": 2026,
+   "modis_equiv": 1075,
+   "ratio": 4.693,
+   "ratio_year": 2025,
    "n20": 2073,
    "n21": 1894,
    "median": 1105.0,
@@ -3691,8 +3706,8 @@
    "snpp": null,
    "modis": null,
    "modis_equiv": null,
-   "ratio": 5.942,
-   "ratio_year": 2026,
+   "ratio": 4.693,
+   "ratio_year": 2025,
    "n20": null,
    "n21": null,
    "median": 10510.5,

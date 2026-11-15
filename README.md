@@ -74,7 +74,9 @@ Base map: © OpenStreetMap contributors (ODbL). No other data source is used.
 4. **MODIS → S-NPP-equivalent calibration per year, never a single constant.** For each year:
    factor = S-NPP detections / MODIS detections, over months that are complete for both sensors and
    not provisional. A year without overlap would take the nearest year's factor (and say so).
-   Factors range from 4.008 (2012) to 4.693 (2025); 5.942 for 2026, from six months. The held-out
+   Factors range from 4.008 (2012) to 4.693 (2025). A year needs at least 11 complete months to set
+   its own factor: 2026 has six, so it uses the 2025 factor (4.693). Its own six-month factor would be
+   5.942, which is shown in the calibration table for transparency but not applied. The held-out
    test of this choice is in Key results.
 5. **Incomplete months are left empty, not extrapolated.** A month has a value for a sensor only if it
    is covered from its first to its last day: January 2012 (data start on the 20th), November 2026 for
@@ -97,9 +99,10 @@ Base map: © OpenStreetMap contributors (ODbL). No other data source is used.
 - **The main series ends on 2 November 2026**: Suomi NPP near-real-time data stop on that day (NASA
   availability service); NOAA-20 and NOAA-21 continue to 13 November 2026 but are only used as a
   cross-check. November 2026 is therefore incomplete.
-- **The 2026 factor is 5.942, from 6 months only** (January to June). It is well outside the 2012-2025
-  range (3.951 to 4.693), so read it with caution (incomplete year; possibly the end of life of the
-  Terra satellite). The 2026 MODIS equivalent depends on it.
+- **The 2026 MODIS equivalent uses the 2025 factor (4.693).** The 2026 factor measured on January to
+  June alone is 5.942, well outside the 2012-2025 range (3.951 to 4.693), so it is not applied. The
+  2026 MODIS equivalent is therefore an estimate; the reason for the high 2026 ratio is not known
+  (partial year, possibly the end of life of the Terra satellite).
 - **Rainy season** (June to September): the median drops below 500 detections (104 in September), so a
   few dozen detections give ±70%. The application says so in the month details.
 - **Days without detections**: FIRMS files list fires only, so a day without any detection cannot be

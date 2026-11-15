@@ -50,12 +50,30 @@ class HarmonizeTest(unittest.TestCase):
         self.assertEqual(c[(2020, 2)], 1)
 
     def test_ratio_per_year_never_constant(self):
-        viirs = pd.Series({(2012, 1): 400, (2012, 2): 420, (2013, 1): 450})
-        modis = pd.Series({(2012, 1): 100, (2012, 2): 100, (2013, 1): 100})
-        r = h.yearly_ratio(viirs, modis, {(2012, 1), (2012, 2), (2013, 1)})
-        self.assertEqual(r[2012]["ratio"], 4.1)
+        # Two fully calibrated years (>= MIN_CALIBRATION_MONTHS months each).
+        viirs_pairs = [((2012, m), 400) for m in range(1, 13)] + [((2013, m), 450) for m in range(1, 13)]
+        modis_pairs = [((2012, m), 100) for m in range(1, 13)] + [((2013, m), 100) for m in range(1, 13)]
+        viirs, modis = pd.Series(dict(viirs_pairs)), pd.Series(dict(modis_pairs))
+        usable = set(viirs.index)
+        r = h.yearly_ratio(viirs, modis, usable)
+        self.assertEqual(r[2012]["ratio"], 4.0)
         self.assertEqual(r[2013]["ratio"], 4.5)
-        self.assertEqual(h.ratio_for(2014, r), (4.5, 2013))  # year without overlap: nearest year, reported
+        self.assertEqual(h.ratio_for(2014, r), (4.5, 2013))  # year without overlap: nearest fully calibrated year
+
+    def test_partial_year_falls_back_to_nearest_fully_calibrated_year(self):
+        # 2012 and 2013 fully calibrated; 2026 has only 6 months and must NOT set its own factor.
+        viirs_pairs = [((2012, m), 400) for m in range(1, 13)] + [((2013, m), 450) for m in range(1, 13)] \
+            + [((2026, m), 600) for m in range(1, 7)]
+        modis_pairs = [((2012, m), 100) for m in range(1, 13)] + [((2013, m), 100) for m in range(1, 13)] \
+            + [((2026, m), 100) for m in range(1, 7)]
+        viirs, modis = pd.Series(dict(viirs_pairs)), pd.Series(dict(modis_pairs))
+        usable = set(viirs.index)
+        r = h.yearly_ratio(viirs, modis, usable)
+        self.assertEqual(r[2026]["months_used"], 6)
+        # 2026 has its own entry in `r` (with 6 months) but ratio_for must skip it.
+        ratio, source = h.ratio_for(2026, r)
+        self.assertEqual(source, 2013)
+        self.assertEqual(ratio, 4.5)
 
     def test_ratio_ignores_incomplete_months(self):
         viirs = pd.Series({(2012, 1): 400, (2012, 2): 999})

@@ -75,7 +75,7 @@ footer{margin:20px 0 8px;font-size:.82rem;color:var(--muted)}
     <p class="lead">NASA's two fire sensors, <span class="term" tabindex="0" data-tip="MODIS: NASA instrument on the Terra and Aqua satellites, watching fires since 2000 with 1 km pixels.">MODIS</span> and <span class="term" tabindex="0" data-tip="VIIRS: newer NASA/NOAA instrument (Suomi NPP since 2012, then NOAA-20 and NOAA-21) with 375 m pixels; it sees many more small fires.">VIIRS</span>, count fires differently; this calendar puts them on one scale so you can see, month by month since 2012, whether Cameroon had more or fewer fires than usual.</p>
     <p class="summary" id="summary" aria-live="polite">Loading…</p>
     <p class="provline" id="provLine" hidden></p>
-    <p class="validity" id="validity">Check on years left out of the calibration: average error 2.48% when MODIS is matched with Aqua only (same time of day), against 4.49% with one constant factor (measured on the development branch; the published series still uses each year's own factor).</p>
+    <p class="validity" id="validity">Check on years left out of the calibration: average error 2.48% when MODIS is matched with Aqua only (same time of day), against 4.49% with one constant factor (leave-one-year-out test, 2013-2025; the published series still uses each year's own factor, and 2026 uses the 2025 factor).</p>
     <button class="primary" id="mostActive" type="button">Show the most active month</button>
   </header>
 
@@ -266,7 +266,7 @@ function renderCompare(){
 }
 
 function renderTables(){
-  $("calib").innerHTML="<tr><th>Year</th><th>Factor</th><th>Months</th></tr>"+AGG.calibration.map(c=>`<tr><td>${c.year}</td><td>${c.ratio.toFixed(3)}</td><td>${c.months_used}</td></tr>`).join("");
+  $("calib").innerHTML="<tr><th>Year</th><th>Factor</th><th>Months</th><th>Used</th></tr>"+AGG.calibration.map(c=>`<tr><td>${c.year}</td><td>${c.ratio.toFixed(3)}</td><td>${c.months_used}</td><td>${c.used===false?"no (partial year; uses the nearest year's factor)":"yes"}</td></tr>`).join("");
   const v=AGG.verification;
   $("verif").innerHTML="<tr><th>Satellite</th><th>Months</th><th>Correlation</th><th>Ratio to Suomi NPP</th></tr>"+
     Object.entries(v).map(([k,o])=>`<tr><td>${k==="n20"?"NOAA-20":"NOAA-21"}</td><td>${o.months}</td><td>${o.corr_with_snpp.toFixed(3)}</td><td>${o.ratio_to_snpp.toFixed(3)}</td></tr>`).join("");
