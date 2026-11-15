@@ -2,7 +2,7 @@
  "meta": {
   "title": "Cameroon fire hotspots, MODIS and VIIRS harmonized",
   "source": "NASA FIRMS (Fire Information for Resource Management System), https://firms.modaps.eosdis.nasa.gov",
-  "generated": "2026-11-14T10:03Z",
+  "generated": "2026-11-15T18:43Z",
   "main_series": "S-NPP (VIIRS 375 m), nominal and high confidence, archive type 0",
   "coverage": {
    "snpp": [
