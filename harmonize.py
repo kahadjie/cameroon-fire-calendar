@@ -89,14 +89,19 @@ def yearly_ratio(viirs: pd.Series, modis: pd.Series, usable: set[tuple[int, int]
     return out
 
 
+MIN_CALIBRATION_MONTHS = 11  # 2012 has 11 complete months (data start on 20 January); 2026 has 6 and must not set its own factor
+
+
 def ratio_for(year: int, ratios: dict[int, dict]) -> tuple[float | None, int | None]:
-    """The year's ratio, otherwise the nearest known year's (reported through its source year)."""
-    if not ratios:
+    """The year's ratio if the year is fully calibrated, otherwise the nearest fully calibrated year's
+    (reported through its source year)."""
+    full = {y: r for y, r in ratios.items() if r["months_used"] >= MIN_CALIBRATION_MONTHS}
+    if not full:
         return None, None
-    if year in ratios:
-        return ratios[year]["ratio"], year
-    nearest = min(ratios, key=lambda y: (abs(y - year), -y))
-    return ratios[nearest]["ratio"], nearest
+    if year in full:
+        return full[year]["ratio"], year
+    nearest = min(full, key=lambda y: (abs(y - year), -y))
+    return full[nearest]["ratio"], nearest
 
 
 def month_medians(counts: dict[tuple[int, int], int], reference: set[tuple[int, int]]) -> dict[int, float]:
@@ -223,7 +228,8 @@ def build(data_dir: Path = DATA) -> tuple[dict, dict]:
         "snpp_archive_static_share": round(static_share, 4),
         "grid_deg": GRID_DEG,
     }
-    calibration = [{"year": y, **v} for y, v in sorted(ratios.items())]
+    calibration = [{"year": y, **v, "used": v["months_used"] >= MIN_CALIBRATION_MONTHS}
+                   for y, v in sorted(ratios.items())]
     agg = {"meta": meta, "calibration": calibration, "verification": verification, "months": months}
     grid = {"grid_deg": GRID_DEG, "series": "snpp", "cells": grid_counts(filter_detections(raw["snpp"]))}
     return agg, grid
