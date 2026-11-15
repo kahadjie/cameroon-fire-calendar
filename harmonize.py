@@ -228,7 +228,8 @@ def build(data_dir: Path = DATA) -> tuple[dict, dict]:
         "snpp_archive_static_share": round(static_share, 4),
         "grid_deg": GRID_DEG,
     }
-    calibration = [{"year": y, **v} for y, v in sorted(ratios.items())]
+    calibration = [{"year": y, **v, "used": v["months_used"] >= MIN_CALIBRATION_MONTHS}
+                   for y, v in sorted(ratios.items())]
     agg = {"meta": meta, "calibration": calibration, "verification": verification, "months": months}
     grid = {"grid_deg": GRID_DEG, "series": "snpp", "cells": grid_counts(filter_detections(raw["snpp"]))}
     return agg, grid

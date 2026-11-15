@@ -21,7 +21,7 @@ MODIS donne la confiance en entier de 0 à 100 ; VIIRS donne `l` (low), `n` (nom
 
 Puis on garde seulement `niveau ≥ 1` (nominale ou haute).
 
-**Pourquoi.** Les deux capteurs ne codent pas la confiance de la même façon. Les seuils 30 et 80 sont ceux documentés par NASA FIRMS pour MODIS. Les détections de niveau bas sont majoritairement des faux positifs (fumées, eau chaude, réflexions), on les écarte pour ne pas biaiser les comptages.
+**Pourquoi.** Les deux capteurs ne codent pas la confiance de la même façon. Les seuils 30 et 80 sont ceux documentés par NASA FIRMS pour MODIS. Les détections de faible confiance sont écartées pour les deux capteurs, afin d'appliquer le même filtre de qualité à chacun.
 
 **Limite.** Le seuil est binaire : une détection à 79 (MODIS) passe, une à 81 aussi, mais la seconde n'est pas beaucoup plus fiable.
 
@@ -31,7 +31,7 @@ Puis on garde seulement `niveau ≥ 1` (nominale ou haute).
 
 Dans les fichiers d'archive, chaque détection a un champ `type` : 0 feu de végétation présumé, 1 volcan, 2 autre source statique, 3 offshore. On garde `type = 0`.
 
-**Pourquoi.** On mesure l'activité des feux, pas celle des volcans ou des torchères. Mesuré sur l'archive S-NPP du Cameroun : 0,42 % des détections sont `type ≠ 0`.
+**Pourquoi.** On mesure l'activité des feux, pas celle des volcans ou des torchères. La proportion de sources non-type-0 est mesurée sur l'archive S-NPP du Cameroun comme `static_share = moyenne(type ≠ 0)` (fonction `build`, `harmonize.py`) : 0,42 %.
 
 **Limite.** Les fichiers NRT (near real time, temps quasi réel) n'ont pas de colonne `type`. Les mois NRT peuvent donc inclure quelques sources statiques — environ 0,4 % d'après la mesure ci-dessus. C'est l'une des raisons pour lesquelles les mois NRT sont marqués provisoires (voir §7).
 
@@ -47,21 +47,19 @@ Pour chaque capteur, on groupe les détections par `(a, m)` et on compte. Un moi
 
 **Fichier :** `harmonize.py`, `yearly_ratio` et `ratio_for`.
 
-Pour chaque année `a` dont les deux capteurs ont au moins `MIN_CALIBRATION_MONTHS = 11` mois complets communs, on calcule
+Pour chaque année `a`, on calcule sur les mois complets communs (`yearly_ratio`) :
 
 ```
 k_a = Σ_m N_S(a, m) / Σ_m N_M(a, m)
 ```
 
-sur les mois complets pour les deux capteurs et non provisoires. L'équivalent MODIS d'un mois vaut `round(N_M(a, m) × k_a)`.
-
-Une année partielle (par exemple 2026 avec six mois) prend le facteur de l'année calibrée la plus proche.
+Le facteur n'est appliqué (`ratio_for`) que si l'année compte au moins `MIN_CALIBRATION_MONTHS = 11` mois ; sinon on prend celui de l'année calibrée la plus proche (en cas d'égalité, la plus récente). L'équivalent MODIS d'un mois vaut `round(N_M(a, m) × k_a)`.
 
 **Pourquoi un ratio de sommes et non une moyenne de ratios mensuels.** Un ratio de sommes pondère naturellement par le nombre de feux : les mois de haute saison, où les deux capteurs voient beaucoup, dominent le facteur ; les mois de saison humide, où un ratio mensuel peut être `3 / 1 = 3` ou `0 / 0` indéfini, ne déséquilibrent rien.
 
-**Pourquoi par année et pas une seule constante.** Les facteurs vont de 4,008 (2012) à 4,693 (2025) et **montent** après 2020 (4,120 → 4,693). Une constante biaiserait toute comparaison entre les deux périodes. La hausse est probablement liée à la dégradation du capteur MODIS sur Terra (fin de vie), qui détecte moins de feux à nombre constant réel.
+**Pourquoi par année et pas une seule constante.** Les facteurs vont de 4,008 (2012) à 4,693 (2025) et **montent** après 2020 (4,120 → 4,693). Une constante biaiserait toute comparaison entre les deux périodes. La cause de la hausse n'est pas établie ; une piste est la fin de vie du capteur MODIS sur Terra.
 
-**Pourquoi un seuil de 11 mois.** 2012 commence le 20 janvier dans les archives FIRMS, soit 11 mois complets (février à décembre) : on veut inclure 2012. 2026 n'a que six mois complets (janvier à juin), ce qui donne un facteur de 5,942, bien hors de la plage 2012-2025 (3,951 à 4,693) ; on ne l'applique pas.
+**Pourquoi un seuil de 11 mois.** 2012 commence le 20 janvier dans les archives FIRMS, soit 11 mois complets (février à décembre) : on veut inclure 2012. 2026 n'a que six mois complets (janvier à juin), ce qui donne un facteur de 5,942, bien hors de la plage 2012-2025 (3,951 à 4,693) ; on ne l'applique pas, mais l'entrée reste visible dans la table de calibration (`used = false`) pour la transparence.
 
 **Validation.** Voir §6 (test par année laissée de côté).
 
@@ -83,7 +81,7 @@ où un mois de référence est complet pour S-NPP, non provisoire, et antérieur
 anomalie(a, m) = (N_S(a, m) − µ_m) / µ_m × 100
 ```
 
-Si `µ_m = 0`, l'anomalie est indéfinie (affichée comme vide).
+Si `µ_m = 0`, l'anomalie est indéfinie (affichée comme vide). L'anomalie est stockée à une décimale dans les données et arrondie à l'entier à l'écran (`fmt` et `pct` dans `index.html`).
 
 **Pourquoi la médiane et non la moyenne.** Les mois de haute saison ont des valeurs très étalées. Février 2023 vaut 90 395 détections contre une médiane de 55 432 ; une moyenne serait tirée vers le haut par cet événement et tous les autres mois paraîtraient « bas ». La médiane est robuste à ces pointes.
 
@@ -95,7 +93,7 @@ Si `µ_m = 0`, l'anomalie est indéfinie (affichée comme vide).
 
 ## 6. Erreur hors échantillon (leave-one-year-out)
 
-**Fichier :** `validate.py`, fonctions `predictors`, `held_out_errors`.
+**Fichier :** `validate.py`, fonctions `predictors`, `held_out_errors`, `all_modis_variant`, `aqua_variant`.
 
 Pour chaque année `a ∈ 2013…2025`, on prédit `k_a` sans utiliser `a`, par trois méthodes :
 
@@ -117,9 +115,9 @@ Une quatrième variante (Aqua seulement : MODIS restreint au satellite Aqua, mê
 
 **Pourquoi laisser l'année cible de côté.** Prédire le facteur d'une année avec les données de cette même année ne mesure pas la robustesse : on mesurerait l'ajustement, pas la généralisation. Laisser l'année hors du calcul simule l'ajout d'une année inconnue.
 
-**Pourquoi tester trois méthodes.** La méthode publiée utilise le facteur de chaque année (meilleure que toutes celles-ci sur les mois complets). Les trois alternatives montrent ce qui se passerait si on devait prédire : la différence entre constant (4,49 %) et trend (3,12 %) justifie la montée documentée du facteur dans le temps, et la variante Aqua seulement (2,48 %) donne une piste d'amélioration pour une future itération.
+**Pourquoi tester trois méthodes.** La méthode publiée utilise le facteur mesuré de chaque année ; par construction son erreur sur l'année elle-même est nulle, ce que ce test ne mesure pas. Les trois alternatives montrent ce qui se passerait si on devait prédire : la différence entre constant (4,49 %) et trend (3,12 %) justifie la montée documentée du facteur dans le temps, et la variante Aqua seulement (2,48 %) donne une piste d'amélioration pour une future itération.
 
-**Limite.** Ce test porte sur les années entières. Pour une année partielle comme 2026, aucune de ces méthodes n'est appliquée telle quelle : 2026 utilise le facteur 2025 (la méthode « année précédente »), choix conservateur à défaut de mesure sur l'année courante.
+**Limite.** Ce test porte sur les années entières. Pour une année partielle comme 2026, aucune de ces méthodes n'est appliquée telle quelle : 2026 utilise le facteur de l'année calibrée la plus proche (ici 2025), choix conservateur à défaut de mesure sur l'année courante.
 
 ## 7. Contrôle croisé avec NOAA-20 et NOAA-21
 
@@ -161,16 +159,30 @@ Un mois est marqué **provisoire** s'il contient des données NRT **ou** s'il fa
 
 **Pourquoi cinq mois.** NASA republie périodiquement les archives, et les cinq derniers mois peuvent encore recevoir des mises à jour (consolidation des détections NRT en archive, corrections de géolocalisation). Un mois NRT clairement, mais aussi un mois d'archive très récent, ne sont donc pas des valeurs définitives.
 
-## Classes de couleur (affichage uniquement)
+## 10. Phrase de résumé générée depuis les données
+
+**Fichier :** `summary.js`, fonction `summaryParts`.
+
+Le texte au-dessus du calendrier est généré à partir des agrégats, pas écrit à la main :
+
+- « dernier mois final » : dernier mois avec une anomalie non nulle et non provisoire ;
+- « X of N final months above usual » : nombre de mois non provisoires de l'année avec `anomaly_pct > 0`, sur les `N` mois non provisoires de l'année ;
+- l'anomalie est arrondie à l'entier ; quand l'arrondi vaut 0, le texte dit « at » au lieu de « above » ou « below » ;
+- une seconde phrase apparaît si un mois provisoire plus récent existe (avec la même règle d'arrondi).
+
+**Pourquoi générée.** La phrase est ce que lisent la plupart des visiteurs. La générer garantit qu'elle reste cohérente avec les données : impossible d'oublier de la mettre à jour quand NASA publie une nouvelle date de couverture.
+
+## Classes de couleur et lisibilité (affichage uniquement)
 
 L'affichage utilise la palette Cividis en 8 classes, avec des bornes différentes selon la vue :
 
 - **Vue « anomalie »** : classes fixes aux seuils −60, −30, −10, +10, +30, +60, +100 %, lisibles directement (un rouge ne vient pas d'un quantile, il vient d'un vrai +60 %).
 - **Vue « détections »** : classes par quantiles sur les valeurs disponibles, pour utiliser toute la palette sur une distribution très étalée.
 
+La couleur du texte de chaque case est choisie par la luminance relative WCAG de la couleur de fond (`lum`, `index.html`) : clair sur fond sombre, sombre sur fond clair.
+
 **Pourquoi Cividis.** Palette ordonnée en luminance, lisible en niveaux de gris et avec le daltonisme. Vérifiée par `check_palette.py` : niveaux de gris de 30 à 224, au moins 22 d'écart entre deux classes voisines.
 
 ## Points à vérifier
 
-- Le script `harmonize.py` complet n'a pas été exécuté dans cette itération (les fichiers FIRMS bruts ne sont pas versionnés). L'édition de `aggregats.json` applique le nouveau `ratio_for`, mais une regénération complète en local, à partir du dossier `data/`, est recommandée avant la soumission finale.
 - La variante « Aqua seulement » (2,48 %) est documentée mais non publiée : elle exige de republier `data/modis/` séparé en Aqua et Terra, qu'on ne versionne pas.
