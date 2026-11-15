@@ -209,23 +209,6 @@ into `data/modis`, `data/snpp`, `data/noaa20`, `data/noaa21`. No API key is used
 
 The repository contains only aggregates: no raw detection, no key, no personal data.
 
-## Status
-
-Done:
-- [x] Harmonized calendar for Cameroon, 2012 to 2 November 2026 (main series) — [index.html](index.html)
-- [x] Generated summary sentence, plain-language labels, explained terms — [index.html](index.html)
-- [x] Validation shown on the page (held-out test, cross-check with NOAA-20/21) — [Key results](#key-results)
-- [x] Compare two years, CSV download with documented columns — [CSV download](#csv-download)
-- [x] Checked at 390 px width, in grayscale, and with the keyboard (Tab, Enter, arrow keys)
-- [x] Audit against the judging criteria — [docs/AUDIT.md](docs/AUDIT.md)
-- [x] Demo scripts and slide plan — [docs/DEMO_PLAN.md](docs/DEMO_PLAN.md)
-- [x] Submission text — [submission/DESCRIPTION.md](submission/DESCRIPTION.md)
-- [x] Submitted to NASA Space Apps on 14 November 2026 (7-slide presentation as demonstration; video
-      optional)
-
-Remaining:
-- [ ] Check with NASA FIRMS whether MODIS has data from 30 August to 8 September 2026
-
 ## Roadmap
 
 - Any country, with automatic updates every 6 hours (built on the development branch `global`, not
